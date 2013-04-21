@@ -1,9 +1,6 @@
-package model;
+package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
@@ -11,41 +8,46 @@ import java.io.Serializable;
 @Table(name = "suppliers")
 public class Supplier implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    // TODO : id generation
     @Id
-    @Column(name = "\"SupplierID\"")
-    private Integer supplierID;
-    @Column(name = "\"Address\"")
+    @SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 30)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
+    @Column(name = "supplierid")
+    private Integer id;
+
     private String address;
-    @Column(name = "\"City\"")
+
     private String city;
-    @Column(name = "\"CompanyName\"")
+
+    @Column(nullable = false)
     private String companyName;
-    @Column(name = "\"ContactName\"")
+
     private String contactName;
-    @Column(name = "\"ContactTitle\"")
+
     private String contactTitle;
-    @Column(name = "\"Country\"")
+
     private String country;
-    @Column(name = "\"Fax\"")
+
     private String fax;
-    @Column(name = "\"HomePage\"")
+
     private String homePage;
-    @Column(name = "\"Phone\"")
+
     private String phone;
-    @Column(name = "\"PostalCode\"")
+
     private String postalCode;
-    @Column(name = "\"Region\"")
+
     private String region;
 
     public Supplier() {
     }
 
-    public Integer getSupplierID() {
-        return this.supplierID;
+    public Integer getId() {
+        return this.id;
     }
 
-    public void setSupplierID(Integer supplierID) {
-        this.supplierID = supplierID;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAddress() {
