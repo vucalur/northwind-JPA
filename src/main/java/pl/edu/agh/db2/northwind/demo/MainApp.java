@@ -6,7 +6,12 @@ import pl.edu.agh.db2.northwind.dao.SupplierDao;
 import pl.edu.agh.db2.northwind.model.Supplier;
 
 public class MainApp {
+
     public static void main(String[] args) {
+        new MainApp().run();
+    }
+
+    void run() {
         ApplicationContext appContext =
                 new ClassPathXmlApplicationContext("context.xml");
 

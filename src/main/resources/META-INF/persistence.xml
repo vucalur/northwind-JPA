@@ -8,7 +8,23 @@
     <persistence-unit name="northwind-spring-jpa">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
+        <!--<class>pl.edu.agh.db2.northwind.model.Category</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Customer</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.CustomerCustomerDemo</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.CustomerCustomerDemoPK</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.CustomerDemographic</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Employee</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.EmployeeTerritory</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.EmployeeterritoryPK</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Order</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetail</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetail</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetailPK</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Product</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Region</class>-->
+        <!--<class>pl.edu.agh.db2.northwind.model.Shipper</class>-->
         <class>pl.edu.agh.db2.northwind.model.Supplier</class>
+        <!--<class>pl.edu.agh.db2.northwind.model.Territory</class>-->
 
         <exclude-unlisted-classes/>
 
@@ -16,7 +32,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgresPlusDialect"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.EJB3NamingStrategy"/>
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
         </properties>

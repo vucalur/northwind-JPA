@@ -9,7 +9,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context 
                            http://www.springframework.org/schema/context/spring-context.xsd
-                           http://www.springframework.org/schema/jdbc 
+                           http://www.springframework.org/schema/jdbc
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
                            http://www.springframework.org/schema/tx
                            http://www.springframework.org/schema/tx/spring-tx.xsd">
@@ -22,7 +22,8 @@
     <!-- TODO: DAO beans do not autowire - FIX IT -->
     <bean id="supplierDao" class="pl.edu.agh.db2.northwind.dao.impl.SupplierDaoImpl"/>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- TODO: Loading properties from props file instead of hardcode - FIX IT -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="url" value="jdbc:postgresql://localhost:5432/n2"/>
         <property name="username" value="postgres"/>

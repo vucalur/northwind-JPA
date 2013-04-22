@@ -1,36 +1,24 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
-
 @Entity
-@Table(name = "suppliers")
-public class Supplier implements Serializable {
+@Table(name = "customers")
+public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // TODO : id generation
-//    @Id
-//    @SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 30)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
-    @Column(name = "supplierid")
-    @TableGenerator(
-            name = "vendorPartGen",
-            table = "PERSISTENCE_ORDER_SEQUENCE_GENERATOR",
-            pkColumnName = "GEN_KEY",
-            valueColumnName = "GEN_VALUE",
-            pkColumnValue = "VENDOR_PART_ID",
-            allocationSize = 10)
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,
-            generator = "vendorPartGen")
-    private Integer id;
+    @Column(name = "customerid")
+    private String id;
 
     private String address;
 
     private String city;
 
-    @Column(nullable = false)
     private String companyName;
 
     private String contactName;
@@ -41,22 +29,20 @@ public class Supplier implements Serializable {
 
     private String fax;
 
-    private String homePage;
-
     private String phone;
 
     private String postalCode;
 
     private String region;
 
-    public Supplier() {
+    public Customer() {
     }
 
-    public Integer getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -114,14 +100,6 @@ public class Supplier implements Serializable {
 
     public void setFax(String fax) {
         this.fax = fax;
-    }
-
-    public String getHomePage() {
-        return this.homePage;
-    }
-
-    public void setHomePage(String homePage) {
-        this.homePage = homePage;
     }
 
     public String getPhone() {
