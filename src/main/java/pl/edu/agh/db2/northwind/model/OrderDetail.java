@@ -1,8 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -10,47 +8,76 @@ import java.io.Serializable;
 public class OrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    private OrderDetailPK id;
+    @Id
+    @Column(name = "odid")
+    @SequenceGenerator(name = "order_details_seq_gen", sequenceName = "order_details_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_details_seq_gen")
+    private Integer id;
 
-    private float discount;
+    @ManyToOne
+    @JoinColumn(name = "orderid")
+    private Order order;
 
-    private Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "productid")
+    private Product product;
 
-    private float unitPrice;
+    // TODO: money type
+    private float unitPrice = 0;
 
-    public OrderDetail() {
+    private Integer quantity = 1;
+
+    // TODO: money type (fixed point)
+    private float discount = 0;
+
+    protected OrderDetail() {
     }
 
-    public OrderDetailPK getId() {
-        return this.id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(OrderDetailPK id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public float getDiscount() {
-        return this.discount;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setDiscount(float discount) {
-        this.discount = discount;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public float getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(float unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public Integer getQuantity() {
-        return this.quantity;
+        return quantity;
     }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public float getUnitPrice() {
-        return this.unitPrice;
+    public float getDiscount() {
+        return discount;
     }
 
-    public void setUnitPrice(float unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setDiscount(float discount) {
+        this.discount = discount;
     }
 }

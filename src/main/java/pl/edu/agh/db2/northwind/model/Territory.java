@@ -1,10 +1,9 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "territories")
@@ -13,37 +12,51 @@ public class Territory implements Serializable {
 
     @Id
     @Column(name = "territoryid")
-    private String id;
+    @SequenceGenerator(name = "territory_seq_gen", sequenceName = "territory_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "territory_seq_gen")
+    private Integer id;
 
-    private Integer regionID;
+    private String territoryDescription;
 
-    @Column(name = "territorydescription")
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "regionid")
+    private Region region;
 
-    public Territory() {
+    @ManyToMany(mappedBy = "territories")
+    private List<Employee> employees = new ArrayList<>();
+
+    protected Territory() {
     }
 
-    public String getId() {
-        return this.id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getRegionID() {
-        return this.regionID;
+    public String getTerritoryDescription() {
+        return territoryDescription;
     }
 
-    public void setRegionID(Integer regionID) {
-        this.regionID = regionID;
+    public void setTerritoryDescription(String territoryDescription) {
+        this.territoryDescription = territoryDescription;
     }
 
-    public String getDescription() {
-        return this.description;
+    public Region getRegion() {
+        return region;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }

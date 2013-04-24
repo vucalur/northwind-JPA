@@ -1,10 +1,9 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -12,58 +11,70 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "customerid")
+    @Column(name = "customerid", length = 5)
+    @SequenceGenerator(name = "customer_seq_gen", sequenceName = "customer_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq_gen")
     private String id;
 
-    private String address;
+    @ManyToMany
+    @JoinTable(name = "customercustomerdemo",
+               joinColumns = {
+                       @JoinColumn(name = "customerid", nullable = false, updatable = false)},
+               inverseJoinColumns = {
+                       @JoinColumn(name = "customertypeid", nullable = false, updatable = false)})
+    private List<CustomerDemographic> demographics = new ArrayList<>();
 
-    private String city;
-
+    @Column(length = 40)
     private String companyName;
 
+    @Column(length = 30)
     private String contactName;
 
+    @Column(length = 30)
     private String contactTitle;
 
-    private String country;
+    @Column(length = 60)
+    private String address;
 
-    private String fax;
+    @Column(length = 15)
+    private String city;
 
-    private String phone;
-
-    private String postalCode;
-
+    @Column(length = 15)
     private String region;
 
-    public Customer() {
+    @Column(length = 10)
+    private String postalCode;
+
+    @Column(length = 15)
+    private String country;
+
+    @Column(length = 24)
+    private String phone;
+
+    @Column(length = 24)
+    private String fax;
+
+    protected Customer() {
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getAddress() {
-        return this.address;
+    public List<CustomerDemographic> getDemographics() {
+        return demographics;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setDemographics(List<CustomerDemographic> demographics) {
+        this.demographics = demographics;
     }
 
     public String getCompanyName() {
-        return this.companyName;
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
@@ -71,7 +82,7 @@ public class Customer implements Serializable {
     }
 
     public String getContactName() {
-        return this.contactName;
+        return contactName;
     }
 
     public void setContactName(String contactName) {
@@ -79,50 +90,66 @@ public class Customer implements Serializable {
     }
 
     public String getContactTitle() {
-        return this.contactTitle;
+        return contactTitle;
     }
 
     public void setContactTitle(String contactTitle) {
         this.contactTitle = contactTitle;
     }
 
-    public String getCountry() {
-        return this.country;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getFax() {
-        return this.fax;
+    public String getCity() {
+        return city;
     }
 
-    public void setFax(String fax) {
-        this.fax = fax;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getPhone() {
-        return this.phone;
+    public String getRegion() {
+        return region;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getPostalCode() {
-        return this.postalCode;
+        return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public String getRegion() {
-        return this.region;
+    public String getCountry() {
+        return country;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 }

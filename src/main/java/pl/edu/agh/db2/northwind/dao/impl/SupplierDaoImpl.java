@@ -40,7 +40,6 @@ public class SupplierDaoImpl implements SupplierDao {
     @Transactional
     public Supplier getSupplier(Integer carId) throws DataAccessException {
         return entityManager.find(Supplier.class, carId);
-
     }
 
     @Override
@@ -60,6 +59,4 @@ public class SupplierDaoImpl implements SupplierDao {
     public void persist(Supplier supplier) throws DataAccessException {
         entityManager.persist(supplier);
     }
-
-
 }

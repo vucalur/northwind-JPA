@@ -2,7 +2,9 @@ package pl.edu.agh.db2.northwind.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -11,13 +13,17 @@ public class Order implements Serializable {
 
     @Id
     @Column(name = "orderid")
+    @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
     private Integer id;
 
-    private String customerID;
+    @ManyToOne
+    @JoinColumn(name = "customerid")
+    private Customer customer;
 
-    private Integer employeeID;
-
-    private float freight;
+    @ManyToOne
+    @JoinColumn(name = "employeeid")
+    private Employee employee;
 
     @Temporal(TemporalType.DATE)
     private Date orderDate;
@@ -25,60 +31,66 @@ public class Order implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date requiredDate;
 
-    private String shipAddress;
-
-    private String shipCity;
-
-    private String shipCountry;
-
-    private String shipName;
-
     @Temporal(TemporalType.DATE)
     private Date shippedDate;
 
-    private String shipPostalCode;
+    @ManyToOne
+    @JoinColumn(name = "shipvia")
+    private Shipper shipper;
 
+    // TODO: money type
+    private float freight;
+
+    @Column(length = 40)
+    private String shipName;
+
+    @Column(length = 60)
+    private String shipAddress;
+
+    @Column(length = 15)
+    private String shipCity;
+
+    @Column(length = 15)
     private String shipRegion;
 
-    private Integer shipVia;
+    @Column(length = 10)
+    private String shipPostalCode;
 
-    public Order() {
+    @Column(length = 15)
+    private String shipCountry;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    protected Order() {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getCustomerID() {
-        return this.customerID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public Integer getEmployeeID() {
-        return this.employeeID;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeID(Integer employeeID) {
-        this.employeeID = employeeID;
-    }
-
-    public float getFreight() {
-        return this.freight;
-    }
-
-    public void setFreight(float freight) {
-        this.freight = freight;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Date getOrderDate() {
-        return this.orderDate;
+        return orderDate;
     }
 
     public void setOrderDate(Date orderDate) {
@@ -86,15 +98,47 @@ public class Order implements Serializable {
     }
 
     public Date getRequiredDate() {
-        return this.requiredDate;
+        return requiredDate;
     }
 
     public void setRequiredDate(Date requiredDate) {
         this.requiredDate = requiredDate;
     }
 
+    public Date getShippedDate() {
+        return shippedDate;
+    }
+
+    public void setShippedDate(Date shippedDate) {
+        this.shippedDate = shippedDate;
+    }
+
+    public Shipper getShipper() {
+        return shipper;
+    }
+
+    public void setShipper(Shipper shipper) {
+        this.shipper = shipper;
+    }
+
+    public float getFreight() {
+        return freight;
+    }
+
+    public void setFreight(float freight) {
+        this.freight = freight;
+    }
+
+    public String getShipName() {
+        return shipName;
+    }
+
+    public void setShipName(String shipName) {
+        this.shipName = shipName;
+    }
+
     public String getShipAddress() {
-        return this.shipAddress;
+        return shipAddress;
     }
 
     public void setShipAddress(String shipAddress) {
@@ -102,58 +146,42 @@ public class Order implements Serializable {
     }
 
     public String getShipCity() {
-        return this.shipCity;
+        return shipCity;
     }
 
     public void setShipCity(String shipCity) {
         this.shipCity = shipCity;
     }
 
-    public String getShipCountry() {
-        return this.shipCountry;
-    }
-
-    public void setShipCountry(String shipCountry) {
-        this.shipCountry = shipCountry;
-    }
-
-    public String getShipName() {
-        return this.shipName;
-    }
-
-    public void setShipName(String shipName) {
-        this.shipName = shipName;
-    }
-
-    public Date getShippedDate() {
-        return this.shippedDate;
-    }
-
-    public void setShippedDate(Date shippedDate) {
-        this.shippedDate = shippedDate;
-    }
-
-    public String getShipPostalCode() {
-        return this.shipPostalCode;
-    }
-
-    public void setShipPostalCode(String shipPostalCode) {
-        this.shipPostalCode = shipPostalCode;
-    }
-
     public String getShipRegion() {
-        return this.shipRegion;
+        return shipRegion;
     }
 
     public void setShipRegion(String shipRegion) {
         this.shipRegion = shipRegion;
     }
 
-    public Integer getShipVia() {
-        return this.shipVia;
+    public String getShipPostalCode() {
+        return shipPostalCode;
     }
 
-    public void setShipVia(Integer shipVia) {
-        this.shipVia = shipVia;
+    public void setShipPostalCode(String shipPostalCode) {
+        this.shipPostalCode = shipPostalCode;
+    }
+
+    public String getShipCountry() {
+        return shipCountry;
+    }
+
+    public void setShipCountry(String shipCountry) {
+        this.shipCountry = shipCountry;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

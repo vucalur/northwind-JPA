@@ -1,9 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -13,17 +10,21 @@ public class Shipper implements Serializable {
 
     @Id
     @Column(name = "shipperid")
+    @SequenceGenerator(name = "shipper_seq_gen", sequenceName = "shipper_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipper_seq_gen")
     private Integer id;
 
+    @Column(length = 40)
     private String companyName;
 
+    @Column(length = 24)
     private String phone;
 
-    public Shipper() {
+    protected Shipper() {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
@@ -31,7 +32,7 @@ public class Shipper implements Serializable {
     }
 
     public String getCompanyName() {
-        return this.companyName;
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
@@ -39,7 +40,7 @@ public class Shipper implements Serializable {
     }
 
     public String getPhone() {
-        return this.phone;
+        return phone;
     }
 
     public void setPhone(String phone) {

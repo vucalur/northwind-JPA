@@ -1,9 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -13,88 +10,94 @@ public class Product implements Serializable {
 
     @Id
     @Column(name = "productid")
+    @SequenceGenerator(name = "products_seq_gen", sequenceName = "products_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq_gen")
     private Integer id;
 
-    private Integer categoryID;
+    @ManyToOne
+    @JoinColumn(name = "categoryid")
+    private Category category;
 
-    private Integer discontinued;
+    @ManyToOne
+    @JoinColumn(name = "supplierid")
+    private Supplier supplier;
 
+    @Column(length = 40)
     private String productName;
 
+    //    FIXME: below doesn't work - doesn't generate table
+//    @Column(name = "discontinued", columnDefinition = "INT(1)")
+    private Boolean discontinued;
+
+    @Column(length = 20)
     private String quantityPerUnit;
 
-    private Integer reorderLevel;
-
-    private Integer supplierID;
-
+    // TODO: money type
     private float unitPrice;
 
     private Integer unitsInStock;
 
     private Integer unitsOnOrder;
 
-    public Product() {
+    private Integer reorderLevel;
+
+    protected Product() {
+    }
+
+    public Product(String productName) {
+        this.productName = productName;
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(Integer id
-    ) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getCategoryID() {
-        return this.categoryID;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryID(Integer categoryID) {
-        this.categoryID = categoryID;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public Integer getDiscontinued() {
-        return this.discontinued;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setDiscontinued(Integer discontinued) {
-        this.discontinued = discontinued;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public String getProductName() {
-        return this.productName;
+        return productName;
     }
 
     public void setProductName(String productName) {
         this.productName = productName;
     }
 
+    public Boolean getDiscontinued() {
+        return discontinued;
+    }
+
+    public void setDiscontinued(Boolean discontinued) {
+        this.discontinued = discontinued;
+    }
+
     public String getQuantityPerUnit() {
-        return this.quantityPerUnit;
+        return quantityPerUnit;
     }
 
     public void setQuantityPerUnit(String quantityPerUnit) {
         this.quantityPerUnit = quantityPerUnit;
     }
 
-    public Integer getReorderLevel() {
-        return this.reorderLevel;
-    }
-
-    public void setReorderLevel(Integer reorderLevel) {
-        this.reorderLevel = reorderLevel;
-    }
-
-    public Integer getSupplierID() {
-        return this.supplierID;
-    }
-
-    public void setSupplierID(Integer supplierID) {
-        this.supplierID = supplierID;
-    }
-
     public float getUnitPrice() {
-        return this.unitPrice;
+        return unitPrice;
     }
 
     public void setUnitPrice(float unitPrice) {
@@ -102,7 +105,7 @@ public class Product implements Serializable {
     }
 
     public Integer getUnitsInStock() {
-        return this.unitsInStock;
+        return unitsInStock;
     }
 
     public void setUnitsInStock(Integer unitsInStock) {
@@ -110,10 +113,18 @@ public class Product implements Serializable {
     }
 
     public Integer getUnitsOnOrder() {
-        return this.unitsOnOrder;
+        return unitsOnOrder;
     }
 
     public void setUnitsOnOrder(Integer unitsOnOrder) {
         this.unitsOnOrder = unitsOnOrder;
+    }
+
+    public Integer getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(Integer reorderLevel) {
+        this.reorderLevel = reorderLevel;
     }
 }

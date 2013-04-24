@@ -1,9 +1,8 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Region implements Serializable {
@@ -11,11 +10,16 @@ public class Region implements Serializable {
 
     @Id
     @Column(name = "regionid")
+    @SequenceGenerator(name = "region_seq_gen", sequenceName = "region_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "region_seq_gen")
     private Integer id;
 
     private String regionDescription;
 
-    public Region() {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "region")
+    private List<Territory> territories;
+
+    protected Region() {
     }
 
     public Integer getId() {
@@ -32,5 +36,13 @@ public class Region implements Serializable {
 
     public void setRegionDescription(String regionDescription) {
         this.regionDescription = regionDescription;
+    }
+
+    public List<Territory> getTerritories() {
+        return territories;
+    }
+
+    public void setTerritories(List<Territory> territories) {
+        this.territories = territories;
     }
 }

@@ -2,82 +2,68 @@ package pl.edu.agh.db2.northwind.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "suppliers")
 public class Supplier implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // TODO : id generation
-//    @Id
-//    @SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 30)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
-    @Column(name = "supplierid")
-    @TableGenerator(
-            name = "vendorPartGen",
-            table = "PERSISTENCE_ORDER_SEQUENCE_GENERATOR",
-            pkColumnName = "GEN_KEY",
-            valueColumnName = "GEN_VALUE",
-            pkColumnValue = "VENDOR_PART_ID",
-            allocationSize = 10)
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,
-            generator = "vendorPartGen")
+    @Column(name = "supplierid")
+    @SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
     private Integer id;
 
-    private String address;
-
-    private String city;
-
-    @Column(nullable = false)
+    @Column(length = 40, nullable = false)
     private String companyName;
 
+    @Column(length = 30)
     private String contactName;
 
+    @Column(length = 30)
     private String contactTitle;
 
+    @Column(length = 60)
+    private String address;
+
+    @Column(length = 15)
+    private String city;
+
+    @Column(length = 15)
+    private String region;
+
+    @Column(length = 10)
+    private String postalCode;
+
+    @Column(length = 15)
     private String country;
 
+    @Column(length = 24)
+    private String phone;
+
+    @Column(length = 24)
     private String fax;
 
     private String homePage;
 
-    private String phone;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
+    private List<Product> products = new ArrayList<>();
 
-    private String postalCode;
-
-    private String region;
-
-    public Supplier() {
+    protected Supplier() {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getAddress() {
-        return this.address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getCompanyName() {
-        return this.companyName;
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
@@ -85,7 +71,7 @@ public class Supplier implements Serializable {
     }
 
     public String getContactName() {
-        return this.contactName;
+        return contactName;
     }
 
     public void setContactName(String contactName) {
@@ -93,23 +79,63 @@ public class Supplier implements Serializable {
     }
 
     public String getContactTitle() {
-        return this.contactTitle;
+        return contactTitle;
     }
 
     public void setContactTitle(String contactTitle) {
         this.contactTitle = contactTitle;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
     public String getCountry() {
-        return this.country;
+        return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getFax() {
-        return this.fax;
+        return fax;
     }
 
     public void setFax(String fax) {
@@ -117,34 +143,18 @@ public class Supplier implements Serializable {
     }
 
     public String getHomePage() {
-        return this.homePage;
+        return homePage;
     }
 
     public void setHomePage(String homePage) {
         this.homePage = homePage;
     }
 
-    public String getPhone() {
-        return this.phone;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPostalCode() {
-        return this.postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getRegion() {
-        return this.region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

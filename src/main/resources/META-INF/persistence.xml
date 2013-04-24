@@ -8,23 +8,17 @@
     <persistence-unit name="northwind-spring-jpa">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-        <!--<class>pl.edu.agh.db2.northwind.model.Category</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Customer</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.CustomerCustomerDemo</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.CustomerCustomerDemoPK</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.CustomerDemographic</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Employee</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.EmployeeTerritory</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.EmployeeterritoryPK</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Order</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetail</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetail</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.OrderDetailPK</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Product</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Region</class>-->
-        <!--<class>pl.edu.agh.db2.northwind.model.Shipper</class>-->
+        <class>pl.edu.agh.db2.northwind.model.Category</class>
+        <class>pl.edu.agh.db2.northwind.model.Customer</class>
+        <class>pl.edu.agh.db2.northwind.model.CustomerDemographic</class>
+        <class>pl.edu.agh.db2.northwind.model.Employee</class>
+        <class>pl.edu.agh.db2.northwind.model.Order</class>
+        <class>pl.edu.agh.db2.northwind.model.OrderDetail</class>
+        <class>pl.edu.agh.db2.northwind.model.Product</class>
+        <class>pl.edu.agh.db2.northwind.model.Region</class>
+        <class>pl.edu.agh.db2.northwind.model.Shipper</class>
         <class>pl.edu.agh.db2.northwind.model.Supplier</class>
-        <!--<class>pl.edu.agh.db2.northwind.model.Territory</class>-->
+        <class>pl.edu.agh.db2.northwind.model.Territory</class>
 
         <exclude-unlisted-classes/>
 

@@ -1,10 +1,9 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -13,19 +12,26 @@ public class Category implements Serializable {
 
     @Id
     @Column(name = "categoryid")
+    @SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
     private Integer id;
 
+    @Column(length = 15)
     private String categoryName;
 
     private String description;
 
-    private byte[] picture;
+    @Column(length = 40)
+    private String picture;
 
-    public Category() {
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
+
+    protected Category() {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
@@ -33,7 +39,7 @@ public class Category implements Serializable {
     }
 
     public String getCategoryName() {
-        return this.categoryName;
+        return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
@@ -41,18 +47,26 @@ public class Category implements Serializable {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public byte[] getPicture() {
-        return this.picture;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

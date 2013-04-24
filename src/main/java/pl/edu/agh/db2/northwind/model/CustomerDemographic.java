@@ -1,10 +1,9 @@
 package pl.edu.agh.db2.northwind.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customerdemographics")
@@ -13,11 +12,16 @@ public class CustomerDemographic implements Serializable {
 
     @Id
     @Column(name = "customertypeid")
+    @SequenceGenerator(name = "customerdemographics_seq_gen", sequenceName = "customerdemographics_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerdemographics_seq_gen")
     private String id;
+
+    @ManyToMany(mappedBy = "demographics")
+    private List<Customer> customers = new ArrayList<>();
 
     private String customerDesc;
 
-    public CustomerDemographic() {
+    protected CustomerDemographic() {
     }
 
     public String getId() {
@@ -26,6 +30,14 @@ public class CustomerDemographic implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 
     public String getCustomerDesc() {
