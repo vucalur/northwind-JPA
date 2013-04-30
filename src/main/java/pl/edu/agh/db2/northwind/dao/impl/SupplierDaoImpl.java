@@ -21,42 +21,42 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class SupplierDaoImpl implements SupplierDao {
 
-    protected EntityManager entityManager;
+	protected EntityManager entityManager;
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+	@PersistenceContext
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 
-    @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public List<Supplier> getSuppliers() throws DataAccessException {
-        Query query = entityManager.createQuery("select c from Supplier c");
-        List<Supplier> resultList = query.getResultList();
-        return resultList;
-    }
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public List<Supplier> getSuppliers() throws DataAccessException {
+		Query query = entityManager.createQuery("select c from Supplier c");
+		List<Supplier> resultList = query.getResultList();
+		return resultList;
+	}
 
-    @Override
-    @Transactional
-    public Supplier getSupplier(Integer carId) throws DataAccessException {
-        return entityManager.find(Supplier.class, carId);
-    }
+	@Override
+	@Transactional
+	public Supplier getSupplier(Integer carId) throws DataAccessException {
+		return entityManager.find(Supplier.class, carId);
+	}
 
-    @Override
-    @Transactional
-    public List<Supplier> getSuppliesCompanyNameStartsWith(String prefix) throws DataAccessException {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Supplier> cq = cb.createQuery(Supplier.class);
-        Root<Supplier> root = cq.from(Supplier.class);
-        cq.where(cb.like(root.get(Supplier_.companyName), prefix + "%"));
-        cq.select(root);
-        TypedQuery<Supplier> q = entityManager.createQuery(cq);
-        return q.getResultList();
-    }
+	@Override
+	@Transactional
+	public List<Supplier> getSuppliesCompanyNameStartsWith(String prefix) throws DataAccessException {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Supplier> cq = cb.createQuery(Supplier.class);
+		Root<Supplier> root = cq.from(Supplier.class);
+		cq.where(cb.like(root.get(Supplier_.companyName), prefix + "%"));
+		cq.select(root);
+		TypedQuery<Supplier> q = entityManager.createQuery(cq);
+		return q.getResultList();
+	}
 
-    @Override
-    @Transactional
-    public void persist(Supplier supplier) throws DataAccessException {
-        entityManager.persist(supplier);
-    }
+	@Override
+	@Transactional
+	public void persist(Supplier supplier) throws DataAccessException {
+		entityManager.persist(supplier);
+	}
 }

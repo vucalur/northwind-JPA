@@ -7,15 +7,15 @@ import pl.edu.agh.db2.northwind.model.Supplier;
 
 public class MainApp {
 
-    public static void main(String[] args) {
-        new MainApp().run();
-    }
+	public static void main(String[] args) {
+		new MainApp().run();
+	}
 
-    void run() {
-        ApplicationContext appContext =
-                new ClassPathXmlApplicationContext("context.xml");
+	void run() {
+		ApplicationContext appContext =
+				new ClassPathXmlApplicationContext("context.xml");
 
-        SupplierDao dao = (SupplierDao) appContext.getBean("supplierDao");
+		SupplierDao dao = (SupplierDao) appContext.getBean("supplierDao");
 
 //        Supplier supplier = new Supplier();
 //        supplier.setCompanyName("Y");
@@ -28,11 +28,11 @@ public class MainApp {
 //        dao.persist(supplier);
 //        System.out.println("4");
 
-        System.out.println(dao.getSupplier(1));
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%");
-        for (Supplier s : dao.getSuppliesCompanyNameStartsWith("P")) {
-            System.out.println(s.getCompanyName() + "     " + s.getId());
-        }
-        System.out.println("Done");
-    }
+		System.out.println(dao.getSupplier(1));
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%");
+		for (Supplier s : dao.getSuppliesCompanyNameStartsWith("P")) {
+			System.out.println(s.getCompanyName() + "     " + s.getId());
+		}
+		System.out.println("Done");
+	}
 }
