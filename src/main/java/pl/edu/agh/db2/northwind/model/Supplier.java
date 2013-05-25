@@ -54,6 +54,10 @@ public class Supplier implements Serializable {
 	protected Supplier() {
 	}
 
+	public Supplier(String companyName) {
+		this.companyName = companyName;
+	}
+
 	public Integer getId() {
 		return id;
 	}

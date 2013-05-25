@@ -1,38 +1,29 @@
 package pl.edu.agh.db2.northwind.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import pl.edu.agh.db2.northwind.dao.SupplierDao;
+import org.springframework.stereotype.Component;
+import pl.edu.agh.db2.northwind.dao.SupplierRepository;
 import pl.edu.agh.db2.northwind.model.Supplier;
 
+@Component
 public class MainApp {
 
+	@Autowired
+	private SupplierRepository dao;
+
 	public static void main(String[] args) {
-		new MainApp().run();
+		ApplicationContext appContext = new ClassPathXmlApplicationContext("context.xml");
+
+		MainApp mainApp = appContext.getBean(MainApp.class);
+		mainApp.start(args);
 	}
 
-	void run() {
-		ApplicationContext appContext =
-				new ClassPathXmlApplicationContext("context.xml");
-
-		SupplierDao dao = (SupplierDao) appContext.getBean("supplierDao");
-
-//        Supplier supplier = new Supplier();
-//        supplier.setCompanyName("Y");
-//        System.out.println("1");
-//        dao.persist(supplier);
-//        System.out.println("2");
-//        supplier = new Supplier();
-//        supplier.setCompanyName("Z");
-//        System.out.println("3");
-//        dao.persist(supplier);
-//        System.out.println("4");
-
-		System.out.println(dao.getSupplier(1));
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%");
-		for (Supplier s : dao.getSuppliesCompanyNameStartsWith("P")) {
-			System.out.println(s.getCompanyName() + "     " + s.getId());
-		}
-		System.out.println("Done");
+	private void start(String[] args) {
+		Supplier supplier = new Supplier("Y");
+		dao.save(supplier);
+		supplier = new Supplier("Z");
+		dao.save(supplier);
 	}
 }
