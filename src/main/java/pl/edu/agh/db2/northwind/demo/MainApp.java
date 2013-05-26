@@ -9,6 +9,8 @@ import pl.edu.agh.db2.northwind.model.Category;
 import pl.edu.agh.db2.northwind.oxm.XmlConverter;
 import pl.edu.agh.db2.northwind.oxm.holders.ListHolder;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,11 +40,9 @@ public class MainApp {
 			category.setDescription(s + s);
 			categories.add(category);
 		}
-		converter.writeToXml(new ListHolder<>(categories), "sampleExportedCategories.xml");
 
-		categories = ((ListHolder<Category>) converter.loadFromXml("categories.xml")).getValues();
-		for (Category category : categories) {
-			System.out.println(category);
-		}
+		// Marshalling only:
+		JAXBElement<ListHolder> jaxbElement = new JAXBElement<>(new QName(null, "Categories"), ListHolder.class, new ListHolder<>(categories));
+		converter.writeToXml(jaxbElement, "sampleExportedCategories.xml");
 	}
 }
