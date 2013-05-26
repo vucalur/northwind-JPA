@@ -14,7 +14,8 @@ public class CustomerDemographic implements Serializable {
 
 	@Id
 	@Column(name = "customertypeid")
-	@SequenceGenerator(name = "customerdemographics_seq_gen", sequenceName = "customerdemographics_seq", allocationSize = 1, initialValue = 1)
+	@SequenceGenerator(name = "customerdemographics_seq_gen", sequenceName = "customerdemographics_seq", allocationSize = 1,
+					   initialValue = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerdemographics_seq_gen")
 	private String id;
 
