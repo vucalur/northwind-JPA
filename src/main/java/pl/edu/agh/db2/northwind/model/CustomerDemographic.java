@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,5 +48,10 @@ public class CustomerDemographic implements Serializable {
 
 	public void setCustomerDesc(String customerDesc) {
 		this.customerDesc = customerDesc;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

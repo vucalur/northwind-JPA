@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -126,5 +128,10 @@ public class Product implements Serializable {
 
 	public void setReorderLevel(Integer reorderLevel) {
 		this.reorderLevel = reorderLevel;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

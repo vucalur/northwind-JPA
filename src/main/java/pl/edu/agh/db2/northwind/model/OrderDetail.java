@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -79,5 +81,10 @@ public class OrderDetail implements Serializable {
 
 	public void setDiscount(float discount) {
 		this.discount = discount;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

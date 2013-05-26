@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -151,5 +153,10 @@ public class Customer implements Serializable {
 
 	public void setFax(String fax) {
 		this.fax = fax;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

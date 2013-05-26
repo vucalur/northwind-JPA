@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -44,5 +46,10 @@ public class Region implements Serializable {
 
 	public void setTerritories(List<Territory> territories) {
 		this.territories = territories;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }
