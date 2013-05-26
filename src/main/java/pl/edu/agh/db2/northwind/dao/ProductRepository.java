@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer>, ProductRepositoryCustom {
 }

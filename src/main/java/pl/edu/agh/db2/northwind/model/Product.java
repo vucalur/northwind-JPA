@@ -3,10 +3,13 @@ package pl.edu.agh.db2.northwind.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "products")
+@XmlRootElement
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,9 +23,23 @@ public class Product implements Serializable {
 	@JoinColumn(name = "categoryid")
 	private Category category;
 
+	/**
+	 * Storing both foreign key and referenced entity (both target the very same DB column)
+	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
+	 */
+	@Column(name = "categoryid", insertable = false, updatable = false)
+	private Integer categoryId;
+
 	@ManyToOne
 	@JoinColumn(name = "supplierid")
 	private Supplier supplier;
+
+	/**
+	 * Storing both foreign key and referenced entity (both target the very same DB column)
+	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
+	 */
+	@Column(name = "supplierid", insertable = false, updatable = false)
+	private Integer supplierId;
 
 	@Column(length = 40)
 	private String productName;
@@ -50,6 +67,7 @@ public class Product implements Serializable {
 		this.productName = productName;
 	}
 
+	@XmlElement(name = "ProductID")
 	public Integer getId() {
 		return id;
 	}
@@ -74,6 +92,7 @@ public class Product implements Serializable {
 		this.supplier = supplier;
 	}
 
+	@XmlElement(name = "ProductName")
 	public String getProductName() {
 		return productName;
 	}
@@ -82,6 +101,7 @@ public class Product implements Serializable {
 		this.productName = productName;
 	}
 
+	@XmlElement(name = "Discontinued")
 	public Boolean getDiscontinued() {
 		return discontinued;
 	}
@@ -90,6 +110,7 @@ public class Product implements Serializable {
 		this.discontinued = discontinued;
 	}
 
+	@XmlElement(name = "QuantityPerUnit")
 	public String getQuantityPerUnit() {
 		return quantityPerUnit;
 	}
@@ -98,6 +119,7 @@ public class Product implements Serializable {
 		this.quantityPerUnit = quantityPerUnit;
 	}
 
+	@XmlElement(name = "UnitPrice")
 	public float getUnitPrice() {
 		return unitPrice;
 	}
@@ -106,6 +128,7 @@ public class Product implements Serializable {
 		this.unitPrice = unitPrice;
 	}
 
+	@XmlElement(name = "UnitsInStock")
 	public Integer getUnitsInStock() {
 		return unitsInStock;
 	}
@@ -114,6 +137,7 @@ public class Product implements Serializable {
 		this.unitsInStock = unitsInStock;
 	}
 
+	@XmlElement(name = "UnitsOnOrder")
 	public Integer getUnitsOnOrder() {
 		return unitsOnOrder;
 	}
@@ -122,6 +146,7 @@ public class Product implements Serializable {
 		this.unitsOnOrder = unitsOnOrder;
 	}
 
+	@XmlElement(name = "ReorderLevel")
 	public Integer getReorderLevel() {
 		return reorderLevel;
 	}
@@ -133,5 +158,23 @@ public class Product implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@XmlElement(name = "SupplierID")
+	public Integer getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(Integer supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	@XmlElement(name = "CategoryID")
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
 }
