@@ -3,12 +3,15 @@ package pl.edu.agh.db2.northwind.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@XmlRootElement
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,9 +32,11 @@ public class Category implements Serializable {
 	@OneToMany(mappedBy = "category")
 	private List<Product> products = new ArrayList<>();
 
-	protected Category() {
+	// TODO: make protected, introduce parametrized constructor
+	public Category() {
 	}
 
+	@XmlElement(name = "CategoryID")
 	public Integer getId() {
 		return id;
 	}
@@ -40,6 +45,7 @@ public class Category implements Serializable {
 		this.id = id;
 	}
 
+	@XmlElement(name = "CategoryName")
 	public String getCategoryName() {
 		return categoryName;
 	}
@@ -48,6 +54,7 @@ public class Category implements Serializable {
 		this.categoryName = categoryName;
 	}
 
+	@XmlElement(name = "Description")
 	public String getDescription() {
 		return description;
 	}
