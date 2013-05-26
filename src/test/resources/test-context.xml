@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!--The use of <context:component-scan> implicitly enables the functionality of <context:annotation-config>-->
+	<!--<context:annotation-config/>-->
+
+	<context:component-scan base-package="pl.edu.agh.db2.northwind"/>
+
+	<jpa:repositories base-package="pl.edu.agh.db2.northwind.dao"/>
+
+
+	<context:property-placeholder location="classpath:properties/database.properties"/>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+	<bean id="transactionManager"
+		  class="org.springframework.orm.jpa.JpaTransactionManager"
+		  p:entityManagerFactory-ref="entityManagerFactory"/>
+
+	<bean id="entityManagerFactory"
+		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		  p:dataSource-ref="dataSource"
+		  p:persistenceUnitName="northwind-spring-jpa">
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+		</property>
+	</bean>
+
+
+	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>pl.edu.agh.db2.northwind.model.Category</value>
+				<value>pl.edu.agh.db2.northwind.model.Customer</value>
+				<value>pl.edu.agh.db2.northwind.model.Employee</value>
+				<value>pl.edu.agh.db2.northwind.model.Order</value>
+				<value>pl.edu.agh.db2.northwind.model.OrderDetail</value>
+				<value>pl.edu.agh.db2.northwind.model.Product</value>
+				<value>pl.edu.agh.db2.northwind.model.Shipper</value>
+				<value>pl.edu.agh.db2.northwind.model.Supplier</value>
+
+				<value>pl.edu.agh.db2.northwind.oxm.holders.ListHolder</value>
+
+				<!-- no xml data for these: -->
+				<!--<value>pl.edu.agh.db2.northwind.model.CustomerDemographic</value>-->
+				<!--<value>pl.edu.agh.db2.northwind.model.Region</value>-->
+				<!--<value>pl.edu.agh.db2.northwind.model.Territory</value>-->
+			</list>
+		</property>
+		<property name="marshallerProperties">
+			<map>
+				<entry>
+					<key>
+						<util:constant static-field="javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT"/>
+					</key>
+					<value type="java.lang.Boolean">true</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+</beans>

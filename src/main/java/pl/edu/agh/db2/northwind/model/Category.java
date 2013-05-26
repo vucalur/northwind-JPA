@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
@@ -32,8 +33,13 @@ public class Category implements Serializable {
 	@OneToMany(mappedBy = "category")
 	private List<Product> products = new ArrayList<>();
 
-	// TODO: make protected, introduce parametrized constructor
-	public Category() {
+	public Category(Integer id, String categoryName, String description) {
+		this.id = id;
+		this.categoryName = categoryName;
+		this.description = description;
+	}
+
+	protected Category() {
 	}
 
 	@XmlElement(name = "CategoryID")
@@ -82,5 +88,19 @@ public class Category implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Category) {
+			Category other = (Category) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getCategoryName(), other.getCategoryName());
+			builder.append(getDescription(), other.getDescription());
+			builder.append(getPicture(), other.getPicture());
+			builder.append(getProducts(), other.getProducts());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }
