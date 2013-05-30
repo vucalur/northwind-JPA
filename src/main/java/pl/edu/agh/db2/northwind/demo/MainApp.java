@@ -1,9 +1,14 @@
 package pl.edu.agh.db2.northwind.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import pl.edu.agh.db2.northwind.dao.*;
 import pl.edu.agh.db2.northwind.model.Category;
 import pl.edu.agh.db2.northwind.model.Product;
@@ -39,6 +44,8 @@ public class MainApp {
 	@Autowired
 	private SupplierRepository supplierRepository;
 
+	private TransactionTemplate transactionTemplate;
+
 	@Autowired
 	private XmlConverter converter;
 
@@ -47,6 +54,11 @@ public class MainApp {
 
 		MainApp mainApp = appContext.getBean(MainApp.class);
 		mainApp.start(args);
+	}
+
+	@Required
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionTemplate = new TransactionTemplate(transactionManager);
 	}
 
 	private void start(String[] args) {
@@ -58,11 +70,17 @@ public class MainApp {
 		supplierRepository.save(unmarshalledSuppliers);
 		productRepository.saveAll(unmarshalledProducts);
 
-		System.out.println(productRepository.findOne(12));
-		System.out.println(productRepository.findOne(12).getProductName());
-		System.out.println(productRepository.findOne(12).getSupplierId());
-		System.out.println(supplierRepository.findOne(5).getCompanyName());
-		// FIXME: causes "could not initialize proxy - no Session " problem
-//		System.out.println(productRepository.findOne(12).getSupplier().getCompanyName());
+		transactionTemplate.execute(new TransactionCallback() {
+			@Override
+			public Object doInTransaction(TransactionStatus status) {
+				System.out.println(productRepository.findOne(12));
+				System.out.println(productRepository.findOne(12).getProductName());
+				System.out.println(productRepository.findOne(12).getSupplierId());
+				System.out.println(supplierRepository.findOne(5).getCompanyName());
+				System.out.println(productRepository.findOne(12).getSupplier().getCompanyName());
+
+				return null;
+			}
+		});
 	}
 }
