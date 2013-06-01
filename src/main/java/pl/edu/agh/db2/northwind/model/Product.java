@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
@@ -68,6 +69,20 @@ public class Product implements Serializable {
 
 	public Product(String productName) {
 		this.productName = productName;
+	}
+
+	public Product(Integer id, Category category, Supplier supplier, String productName, Boolean discontinued, String quantityPerUnit,
+				   float unitPrice, Integer unitsInStock, Integer unitsOnOrder, Integer reorderLevel) {
+		this.id = id;
+		this.category = category;
+		this.supplier = supplier;
+		this.productName = productName;
+		this.discontinued = discontinued;
+		this.quantityPerUnit = quantityPerUnit;
+		this.unitPrice = unitPrice;
+		this.unitsInStock = unitsInStock;
+		this.unitsOnOrder = unitsOnOrder;
+		this.reorderLevel = reorderLevel;
 	}
 
 	@XmlElement(name = "ProductID")
@@ -181,5 +196,24 @@ public class Product implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Product) {
+			Product other = (Product) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getCategory(), other.getCategory());
+			builder.append(getDiscontinued(), other.getDiscontinued());
+			builder.append(getProductName(), other.getProductName());
+			builder.append(getQuantityPerUnit(), other.getQuantityPerUnit());
+			builder.append(getReorderLevel(), other.getReorderLevel());
+			builder.append(getSupplier(), other.getSupplier());
+			builder.append(getUnitPrice(), other.getUnitPrice());
+			builder.append(getUnitsInStock(), other.getUnitsInStock());
+			builder.append(getUnitsOnOrder(), other.getUnitsOnOrder());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }

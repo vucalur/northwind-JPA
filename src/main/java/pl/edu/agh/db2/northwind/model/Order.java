@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
@@ -92,6 +93,24 @@ public class Order implements Serializable {
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	protected Order() {
+	}
+
+	public Order(Integer id, Customer customer, Employee employee, Date orderDate, Date shippedDate, Date requiredDate, Shipper shipper,
+				 float freight, String shipName, String shipAddress, String shipCity, String shipRegion, String shipPostalCode, String shipCountry) {
+		this.id = id;
+		this.customer = customer;
+		this.employee = employee;
+		this.orderDate = orderDate;
+		this.shippedDate = shippedDate;
+		this.requiredDate = requiredDate;
+		this.shipper = shipper;
+		this.freight = freight;
+		this.shipName = shipName;
+		this.shipAddress = shipAddress;
+		this.shipCity = shipCity;
+		this.shipRegion = shipRegion;
+		this.shipPostalCode = shipPostalCode;
+		this.shipCountry = shipCountry;
 	}
 
 	@XmlElement(name = "OrderID")
@@ -258,5 +277,28 @@ public class Order implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Order) {
+			Order other = (Order) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getCustomer(), other.getCustomer());
+			builder.append(getEmployee(), other.getEmployee());
+			builder.append(getFreight(), other.getFreight());
+			builder.append(getOrderDate(), other.getOrderDate());
+			builder.append(getRequiredDate(), other.getRequiredDate());
+			builder.append(getShipper(), other.getShipper());
+			builder.append(getShipAddress(), other.getShipAddress());
+			builder.append(getShipCity(), other.getShipCity());
+			builder.append(getShipCountry(), other.getShipCountry());
+			builder.append(getShipPostalCode(), other.getShipPostalCode());
+			builder.append(getShipRegion(), other.getShipRegion());
+			builder.append(getShipName(), other.getShipName());
+			builder.append(getShippedDate(), other.getShippedDate());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }

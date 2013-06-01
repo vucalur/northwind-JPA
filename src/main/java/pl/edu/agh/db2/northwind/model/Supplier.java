@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
@@ -62,8 +63,20 @@ public class Supplier implements Serializable {
 	protected Supplier() {
 	}
 
-	public Supplier(String companyName) {
+	public Supplier(Integer id, String companyName, String contactName, String contactTitle, String address, String city, String region,
+					String postalCode, String country, String phone, String fax, String homePage) {
+		this.id = id;
 		this.companyName = companyName;
+		this.contactName = contactName;
+		this.contactTitle = contactTitle;
+		this.address = address;
+		this.city = city;
+		this.region = region;
+		this.postalCode = postalCode;
+		this.country = country;
+		this.phone = phone;
+		this.fax = fax;
+		this.homePage = homePage;
 	}
 
 	@XmlElement(name = "SupplierID")
@@ -186,5 +199,25 @@ public class Supplier implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Supplier) {
+			Supplier other = (Supplier) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getCompanyName(), other.getCompanyName());
+			builder.append(getPhone(), other.getPhone());
+			builder.append(getCity(), other.getCity());
+			builder.append(getCountry(), other.getCountry());
+			builder.append(getAddress(), other.getAddress());
+			builder.append(getContactName(), other.getContactName());
+			builder.append(getFax(), other.getFax());
+			builder.append(getHomePage(), other.getHomePage());
+			builder.append(getPostalCode(), other.getPostalCode());
+			builder.append(getRegion(), other.getRegion());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }

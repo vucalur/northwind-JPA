@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:test-context.xml")
 public class XmlConverterTestEmployee {
+
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
@@ -68,8 +69,7 @@ public class XmlConverterTestEmployee {
 		converter.writeToXml(new ListHolder<>(employeesPattern), xmlTmpFile.getPath());
 		List<Employee> unmarshalledEmployees = ((ListHolder<Employee>) converter.loadFromXml(xmlTmpFile.getPath())).getValues();
 
-		Employee additional = new Employee(4, "Someone", "Additional", "Someone", new Date(), "Someone", new Date(), "Somewhere",
-										   "Somewhere", "Somewhere", "654321", "Somewhere", "987654321", "4", "Someone", 1);
+		Employee additional = new Employee(4, "s1", "s2", "s3", new Date(), "s4", new Date(), "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12", 1);
 		employeesPattern.add(additional);
 
 		assertNotEquals(unmarshalledEmployees, employeesPattern);

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import pl.edu.agh.db2.northwind.model.Category;
+import pl.edu.agh.db2.northwind.model.Shipper;
 import pl.edu.agh.db2.northwind.oxm.holders.ListHolder;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import static pl.edu.agh.db2.northwind.utils.StringUtils.multiply;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:test-context.xml")
-public class XmlConverterTestCategory {
+public class XmlConverterTestShipper {
 
 	private static final Random RANDOM = new Random();
 
@@ -32,7 +32,7 @@ public class XmlConverterTestCategory {
 
 	private File xmlTmpFile;
 
-	private List<Category> categoriesPattern;
+	private List<Shipper> pattern;
 
 	@Autowired
 	private XmlConverter converter;
@@ -40,34 +40,34 @@ public class XmlConverterTestCategory {
 	@Before
 	public void setUp() {
 		try {
-			xmlTmpFile = tempFolder.newFile("categories.xml");
+			xmlTmpFile = tempFolder.newFile("shippers.xml");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
-		categoriesPattern = new ArrayList<>();
+		pattern = new ArrayList<>();
 		for (String s : new String[]{"A", "B", "C"}) {
-			Category category = new Category(RANDOM.nextInt(), s, multiply(s, 2));
-			categoriesPattern.add(category);
+			Shipper shipper = new Shipper(RANDOM.nextInt(), s, multiply(s, 2));
+			pattern.add(shipper);
 		}
 	}
 
 	@Test
 	public void testLoadFromXmlSame() {
-		converter.writeToXml(new ListHolder<>(categoriesPattern), xmlTmpFile.getPath());
-		List<Category> unmarshalledCategories = ((ListHolder<Category>) converter.loadFromXml(xmlTmpFile.getPath())).getValues();
+		converter.writeToXml(new ListHolder<>(pattern), xmlTmpFile.getPath());
+		List<Shipper> unmarshalled = ((ListHolder<Shipper>) converter.loadFromXml(xmlTmpFile.getPath())).getValues();
 
-		assertEquals(unmarshalledCategories, categoriesPattern);
+		assertEquals(unmarshalled, pattern);
 	}
 
 	@Test
 	public void testLoadFromXmlDiffer() {
-		converter.writeToXml(new ListHolder<>(categoriesPattern), xmlTmpFile.getPath());
-		List<Category> unmarshalledCategories = ((ListHolder<Category>) converter.loadFromXml(xmlTmpFile.getPath())).getValues();
+		converter.writeToXml(new ListHolder<>(pattern), xmlTmpFile.getPath());
+		List<Shipper> unmarshalled = ((ListHolder<Shipper>) converter.loadFromXml(xmlTmpFile.getPath())).getValues();
 
-		Category additionalCategory = new Category(123, "sth", "sth desc");
-		unmarshalledCategories.add(additionalCategory);
+		Shipper additional = new Shipper(123, "sth", "12 345 6789");
+		unmarshalled.add(additional);
 
-		assertNotEquals(unmarshalledCategories, categoriesPattern);
+		assertNotEquals(unmarshalled, pattern);
 	}
 }

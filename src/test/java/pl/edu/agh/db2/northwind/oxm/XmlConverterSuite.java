@@ -6,7 +6,13 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 							XmlConverterTestCategory.class,
-							XmlConverterTestEmployee.class
+							XmlConverterTestCustomer.class,
+							XmlConverterTestEmployee.class,
+							XmlConverterTestOrder.class,
+							XmlConverterTestOrderDetail.class,
+							XmlConverterTestProduct.class,
+							XmlConverterTestShipper.class,
+							XmlConverterTestSupplier.class,
 					})
 public class XmlConverterSuite {
 }

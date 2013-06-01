@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
@@ -33,6 +34,12 @@ public class Shipper implements Serializable {
 	protected Shipper() {
 	}
 
+	public Shipper(Integer id, String companyName, String phone) {
+		this.id = id;
+		this.companyName = companyName;
+		this.phone = phone;
+	}
+
 	@XmlElement(name = "ShipperID")
 	public Integer getId() {
 		return id;
@@ -63,5 +70,17 @@ public class Shipper implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Shipper) {
+			Shipper other = (Shipper) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getCompanyName(), other.getCompanyName());
+			builder.append(getPhone(), other.getPhone());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }

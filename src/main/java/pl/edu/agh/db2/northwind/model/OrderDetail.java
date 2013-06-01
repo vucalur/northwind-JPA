@@ -56,6 +56,15 @@ public class OrderDetail implements Serializable {
 	protected OrderDetail() {
 	}
 
+	public OrderDetail(Integer id, Order order, Product product, float unitPrice, Integer quantity, float discount) {
+		this.id = id;
+		this.order = order;
+		this.product = product;
+		this.unitPrice = unitPrice;
+		this.quantity = quantity;
+		this.discount = discount;
+	}
+
 	@XmlElement(name = "odID")
 	public Integer getId() {
 		return id;
@@ -131,5 +140,20 @@ public class OrderDetail implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof OrderDetail) {
+			OrderDetail other = (OrderDetail) obj;
+			EqualsBuilder builder = new EqualsBuilder();
+			builder.append(getDiscount(), other.getDiscount());
+			builder.append(getUnitPrice(), other.getUnitPrice());
+			builder.append(getOrder(), other.getOrder());
+			builder.append(getProduct(), other.getProduct());
+			builder.append(getQuantity(), other.getQuantity());
+			return builder.isEquals();
+		}
+		return false;
 	}
 }
