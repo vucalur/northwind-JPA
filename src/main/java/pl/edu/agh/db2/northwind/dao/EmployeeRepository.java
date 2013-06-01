@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.Employee;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer>, EmployeeRepositoryCustom {
 }

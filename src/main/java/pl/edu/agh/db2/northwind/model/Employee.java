@@ -6,6 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +20,10 @@ public class Employee implements Serializable {
 
 	@Id
 	@Column(name = "employeeid")
-	@SequenceGenerator(name = "employee_seq_gen", sequenceName = "employee_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "employee_seq_gen", sequenceName = "employee_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq_gen")
 	private Integer id;
 
 	@Column(length = 20)
@@ -78,6 +81,7 @@ public class Employee implements Serializable {
 	 * Storing both foreign key and referenced entity (both target the very same DB column)
 	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
 	 */
+	// TODO: Doesn't work with self-referencing relationship
 	@Column(name = "reportsto", insertable = false, updatable = false)
 	private Integer reportsTo;
 
@@ -276,6 +280,7 @@ public class Employee implements Serializable {
 		this.photoPath = photoPath;
 	}
 
+	@XmlTransient
 	public Employee getSupervisor() {
 		return supervisor;
 	}
@@ -284,6 +289,7 @@ public class Employee implements Serializable {
 		this.supervisor = supervisor;
 	}
 
+	@XmlTransient
 	public List<Employee> getSubordinates() {
 		return subordinates;
 	}

@@ -18,8 +18,10 @@ public class Category implements Serializable {
 
 	@Id
 	@Column(name = "categoryid")
-	@SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
 	private Integer id;
 
 	@Column(length = 15)

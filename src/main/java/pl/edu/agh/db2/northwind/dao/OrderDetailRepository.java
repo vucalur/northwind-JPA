@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.OrderDetail;
 
 @Repository
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer>, OrderDetailRepositoryCustom {
 }

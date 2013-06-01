@@ -10,9 +10,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import pl.edu.agh.db2.northwind.dao.*;
-import pl.edu.agh.db2.northwind.model.Category;
-import pl.edu.agh.db2.northwind.model.Product;
-import pl.edu.agh.db2.northwind.model.Supplier;
+import pl.edu.agh.db2.northwind.model.*;
 import pl.edu.agh.db2.northwind.oxm.XmlConverter;
 import pl.edu.agh.db2.northwind.oxm.holders.ListHolder;
 
@@ -66,9 +64,24 @@ public class MainApp {
 		List<Supplier> unmarshalledSuppliers = ((ListHolder<Supplier>) converter.loadFromXml("suppliers.xml")).getValues();
 		List<Product> unmarshalledProducts = ((ListHolder<Product>) converter.loadFromXml("products.xml")).getValues();
 
+		List<Shipper> unmarshalledShippers = ((ListHolder<Shipper>) converter.loadFromXml("shippers.xml")).getValues();
+		List<Employee> unmarshalledEmployees = ((ListHolder<Employee>) converter.loadFromXml("employees.xml")).getValues();
+		List<Customer> unmarshalledCustomers = ((ListHolder<Customer>) converter.loadFromXml("customers.xml")).getValues();
+
+		final List<Order> unmarshalledOrders = ((ListHolder<Order>) converter.loadFromXml("orders.xml")).getValues();
+
+		final List<OrderDetail> unmarshalledOrderDetails = ((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails.xml")).getValues();
+
 		categoryRepository.save(unmarshalledCategories);
 		supplierRepository.save(unmarshalledSuppliers);
 		productRepository.saveAll(unmarshalledProducts);
+
+		shipperRepository.save(unmarshalledShippers);
+		employeeRepository.saveAll(unmarshalledEmployees);
+		customerRepository.save(unmarshalledCustomers);
+
+		orderRepository.saveAll(unmarshalledOrders);
+		orderDetailRepository.saveAll(unmarshalledOrderDetails);
 
 		transactionTemplate.execute(new TransactionCallback() {
 			@Override

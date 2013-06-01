@@ -5,6 +5,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,10 @@ public class Supplier implements Serializable {
 
 	@Id
 	@Column(name = "supplierid")
-	@SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "suppliers_seq_gen", sequenceName = "suppliers_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppliers_seq_gen")
 	private Integer id;
 
 	@Column(length = 40, nullable = false)
@@ -171,6 +174,7 @@ public class Supplier implements Serializable {
 		this.homePage = homePage;
 	}
 
+	@XmlTransient
 	public List<Product> getProducts() {
 		return products;
 	}

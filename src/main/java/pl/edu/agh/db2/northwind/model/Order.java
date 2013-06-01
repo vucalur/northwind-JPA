@@ -3,6 +3,9 @@ package pl.edu.agh.db2.northwind.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,22 +13,39 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@XmlRootElement
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "orderid")
-	@SequenceGenerator(name = "order_seq_gen", sequenceName = "order_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+	// @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_seq", allocationSize = 1, initialValue = 1)
+	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
 	private Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "customerid")
 	private Customer customer;
 
+	/**
+	 * Storing both foreign key and referenced entity (both target the very same DB column)
+	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
+	 */
+	@Column(name = "customerid", insertable = false, updatable = false)
+	private String customerId;
+
 	@ManyToOne
 	@JoinColumn(name = "employeeid")
 	private Employee employee;
+
+	/**
+	 * Storing both foreign key and referenced entity (both target the very same DB column)
+	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
+	 */
+	@Column(name = "employeeid", insertable = false, updatable = false)
+	private Integer employeeId;
 
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
@@ -39,6 +59,13 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "shipvia")
 	private Shipper shipper;
+
+	/**
+	 * Storing both foreign key and referenced entity (both target the very same DB column)
+	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
+	 */
+	@Column(name = "shipvia", insertable = false, updatable = false)
+	private Integer shipperId;
 
 	// TODO: money type
 	private float freight;
@@ -67,6 +94,7 @@ public class Order implements Serializable {
 	protected Order() {
 	}
 
+	@XmlElement(name = "OrderID")
 	public Integer getId() {
 		return id;
 	}
@@ -75,6 +103,7 @@ public class Order implements Serializable {
 		this.id = id;
 	}
 
+	@XmlTransient
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -83,6 +112,7 @@ public class Order implements Serializable {
 		this.customer = customer;
 	}
 
+	@XmlTransient
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -91,6 +121,7 @@ public class Order implements Serializable {
 		this.employee = employee;
 	}
 
+	@XmlElement(name = "OrderDate")
 	public Date getOrderDate() {
 		return orderDate;
 	}
@@ -99,6 +130,7 @@ public class Order implements Serializable {
 		this.orderDate = orderDate;
 	}
 
+	@XmlElement(name = "RequiredDate")
 	public Date getRequiredDate() {
 		return requiredDate;
 	}
@@ -107,6 +139,7 @@ public class Order implements Serializable {
 		this.requiredDate = requiredDate;
 	}
 
+	@XmlElement(name = "ShippedDate")
 	public Date getShippedDate() {
 		return shippedDate;
 	}
@@ -115,6 +148,7 @@ public class Order implements Serializable {
 		this.shippedDate = shippedDate;
 	}
 
+	@XmlTransient
 	public Shipper getShipper() {
 		return shipper;
 	}
@@ -123,6 +157,7 @@ public class Order implements Serializable {
 		this.shipper = shipper;
 	}
 
+	@XmlElement(name = "Freight")
 	public float getFreight() {
 		return freight;
 	}
@@ -131,6 +166,7 @@ public class Order implements Serializable {
 		this.freight = freight;
 	}
 
+	@XmlElement(name = "ShipName")
 	public String getShipName() {
 		return shipName;
 	}
@@ -139,6 +175,7 @@ public class Order implements Serializable {
 		this.shipName = shipName;
 	}
 
+	@XmlElement(name = "ShipAddress")
 	public String getShipAddress() {
 		return shipAddress;
 	}
@@ -147,6 +184,7 @@ public class Order implements Serializable {
 		this.shipAddress = shipAddress;
 	}
 
+	@XmlElement(name = "ShipCity")
 	public String getShipCity() {
 		return shipCity;
 	}
@@ -155,6 +193,7 @@ public class Order implements Serializable {
 		this.shipCity = shipCity;
 	}
 
+	@XmlElement(name = "ShipRegion")
 	public String getShipRegion() {
 		return shipRegion;
 	}
@@ -163,6 +202,7 @@ public class Order implements Serializable {
 		this.shipRegion = shipRegion;
 	}
 
+	@XmlElement(name = "ShipPostalCode")
 	public String getShipPostalCode() {
 		return shipPostalCode;
 	}
@@ -171,6 +211,7 @@ public class Order implements Serializable {
 		this.shipPostalCode = shipPostalCode;
 	}
 
+	@XmlElement(name = "ShipCountry")
 	public String getShipCountry() {
 		return shipCountry;
 	}
@@ -185,6 +226,33 @@ public class Order implements Serializable {
 
 	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
+	}
+
+	@XmlElement(name = "CustomerID")
+	public String getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+	@XmlElement(name = "EmployeeID")
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	@XmlElement(name = "ShipVia")
+	public Integer getShipperId() {
+		return shipperId;
+	}
+
+	public void setShipperId(Integer shipperId) {
+		this.shipperId = shipperId;
 	}
 
 	@Override

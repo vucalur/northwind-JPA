@@ -5,6 +5,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Entity
@@ -15,8 +16,10 @@ public class Product implements Serializable {
 
 	@Id
 	@Column(name = "productid")
-	@SequenceGenerator(name = "products_seq_gen", sequenceName = "products_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "products_seq_gen", sequenceName = "products_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq_gen")
 	private Integer id;
 
 	@ManyToOne
@@ -76,6 +79,7 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 
+	@XmlTransient
 	public Category getCategory() {
 		return category;
 	}
@@ -84,6 +88,7 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
+	@XmlTransient
 	public Supplier getSupplier() {
 		return supplier;
 	}
@@ -155,11 +160,6 @@ public class Product implements Serializable {
 		this.reorderLevel = reorderLevel;
 	}
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 	@XmlElement(name = "SupplierID")
 	public Integer getSupplierId() {
 		return supplierId;
@@ -176,5 +176,10 @@ public class Product implements Serializable {
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

@@ -3,19 +3,20 @@ package pl.edu.agh.db2.northwind.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "customers")
+@XmlRootElement
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "customerid", length = 5)
-	@SequenceGenerator(name = "customer_seq_gen", sequenceName = "customer_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq_gen")
 	private String id;
 
 	@ManyToMany
@@ -59,6 +60,7 @@ public class Customer implements Serializable {
 	protected Customer() {
 	}
 
+	@XmlElement(name = "CustomerID")
 	public String getId() {
 		return id;
 	}
@@ -75,6 +77,7 @@ public class Customer implements Serializable {
 		this.demographics = demographics;
 	}
 
+	@XmlElement(name = "CompanyName")
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -83,6 +86,7 @@ public class Customer implements Serializable {
 		this.companyName = companyName;
 	}
 
+	@XmlElement(name = "ContactName")
 	public String getContactName() {
 		return contactName;
 	}
@@ -91,6 +95,7 @@ public class Customer implements Serializable {
 		this.contactName = contactName;
 	}
 
+	@XmlElement(name = "ContactTitle")
 	public String getContactTitle() {
 		return contactTitle;
 	}
@@ -99,6 +104,7 @@ public class Customer implements Serializable {
 		this.contactTitle = contactTitle;
 	}
 
+	@XmlElement(name = "Address")
 	public String getAddress() {
 		return address;
 	}
@@ -107,6 +113,7 @@ public class Customer implements Serializable {
 		this.address = address;
 	}
 
+	@XmlElement(name = "City")
 	public String getCity() {
 		return city;
 	}
@@ -115,6 +122,7 @@ public class Customer implements Serializable {
 		this.city = city;
 	}
 
+	@XmlElement(name = "Region")
 	public String getRegion() {
 		return region;
 	}
@@ -123,6 +131,7 @@ public class Customer implements Serializable {
 		this.region = region;
 	}
 
+	@XmlElement(name = "PostalCode")
 	public String getPostalCode() {
 		return postalCode;
 	}
@@ -131,6 +140,7 @@ public class Customer implements Serializable {
 		this.postalCode = postalCode;
 	}
 
+	@XmlElement(name = "Country")
 	public String getCountry() {
 		return country;
 	}
@@ -139,6 +149,7 @@ public class Customer implements Serializable {
 		this.country = country;
 	}
 
+	@XmlElement(name = "Phone")
 	public String getPhone() {
 		return phone;
 	}
@@ -147,6 +158,7 @@ public class Customer implements Serializable {
 		this.phone = phone;
 	}
 
+	@XmlElement(name = "Fax")
 	public String getFax() {
 		return fax;
 	}

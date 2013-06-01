@@ -2,18 +2,26 @@ package pl.edu.agh.db2.northwind.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "shippers")
+@XmlRootElement
 public class Shipper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "shipperid")
-	@SequenceGenerator(name = "shipper_seq_gen", sequenceName = "shipper_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipper_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "shipper_seq_gen", sequenceName = "shipper_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipper_seq_gen")
 	private Integer id;
 
 	@Column(length = 40)
@@ -25,6 +33,7 @@ public class Shipper implements Serializable {
 	protected Shipper() {
 	}
 
+	@XmlElement(name = "ShipperID")
 	public Integer getId() {
 		return id;
 	}
@@ -33,6 +42,7 @@ public class Shipper implements Serializable {
 		this.id = id;
 	}
 
+	@XmlElement(name = "CompanyName")
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -41,6 +51,7 @@ public class Shipper implements Serializable {
 		this.companyName = companyName;
 	}
 
+	@XmlElement(name = "Phone")
 	public String getPhone() {
 		return phone;
 	}

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.Order;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface OrderRepository extends JpaRepository<Order, Integer>, OrderRepositoryCustom {
 }
