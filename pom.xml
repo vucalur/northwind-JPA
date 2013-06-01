@@ -110,6 +110,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.framework.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -137,7 +138,6 @@
 
 			<build>
 				<plugins>
-
 					<plugin>
 						<artifactId>maven-compiler-plugin</artifactId>
 						<configuration>
@@ -162,7 +162,6 @@
 							</execution>
 						</executions>
 					</plugin>
-
 				</plugins>
 			</build>
 		</profile>
