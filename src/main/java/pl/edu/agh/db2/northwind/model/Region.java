@@ -12,8 +12,10 @@ public class Region implements Serializable {
 
 	@Id
 	@Column(name = "regionid")
-	@SequenceGenerator(name = "region_seq_gen", sequenceName = "region_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "region_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "region_seq_gen", sequenceName = "region_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "region_seq_gen")
 	private Integer id;
 
 	private String regionDescription;

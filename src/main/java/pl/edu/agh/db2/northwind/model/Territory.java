@@ -14,8 +14,10 @@ public class Territory implements Serializable {
 
 	@Id
 	@Column(name = "territoryid")
-	@SequenceGenerator(name = "territory_seq_gen", sequenceName = "territory_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "territory_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "territory_seq_gen", sequenceName = "territory_seq", allocationSize = 1, initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "territory_seq_gen")
 	private Integer id;
 
 	private String territoryDescription;

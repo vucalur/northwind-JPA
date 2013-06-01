@@ -14,9 +14,11 @@ public class CustomerDemographic implements Serializable {
 
 	@Id
 	@Column(name = "customertypeid")
-	@SequenceGenerator(name = "customerdemographics_seq_gen", sequenceName = "customerdemographics_seq", allocationSize = 1,
-					   initialValue = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerdemographics_seq_gen")
+	// IMPORTANT: in order to set PK values manually with PostgreSQL (needed for loading data from XML with OXM),
+	// sequence generators must be disabled
+//	@SequenceGenerator(name = "customerdemographics_seq_gen", sequenceName = "customerdemographics_seq", allocationSize = 1,
+//					   initialValue = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerdemographics_seq_gen")
 	private String id;
 
 	@ManyToMany(mappedBy = "demographics")
