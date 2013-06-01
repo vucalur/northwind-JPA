@@ -1,5 +1,6 @@
 package pl.edu.agh.db2.northwind.demo;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
@@ -14,10 +15,14 @@ import pl.edu.agh.db2.northwind.model.*;
 import pl.edu.agh.db2.northwind.oxm.XmlConverter;
 import pl.edu.agh.db2.northwind.oxm.holders.ListHolder;
 
+import javax.inject.Inject;
 import java.util.List;
 
 @Component
 public class MainApp {
+	@Inject
+	private static Logger logger;
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -72,6 +77,7 @@ public class MainApp {
 
 		final List<OrderDetail> unmarshalledOrderDetails = ((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails.xml")).getValues();
 
+		logger.info("Loading ALL started");
 		categoryRepository.save(unmarshalledCategories);
 		supplierRepository.save(unmarshalledSuppliers);
 		productRepository.saveAll(unmarshalledProducts);
@@ -80,8 +86,11 @@ public class MainApp {
 		employeeRepository.saveAll(unmarshalledEmployees);
 		customerRepository.save(unmarshalledCustomers);
 
+		logger.info("Loading orders started");
 		orderRepository.saveAll(unmarshalledOrders);
 		orderDetailRepository.saveAll(unmarshalledOrderDetails);
+		logger.info("Loading orders finished");
+		logger.info("Loading ALL finished");
 
 		transactionTemplate.execute(new TransactionCallback() {
 			@Override
