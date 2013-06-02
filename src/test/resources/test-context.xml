@@ -49,11 +49,6 @@
 	</bean>
 
 
-	<bean id="dataLoader" class="pl.edu.agh.db2.northwind.main.DataLoader">
-		<property name="transactionManager" ref="transactionManager"/>
-	</bean>
-
-
 	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>

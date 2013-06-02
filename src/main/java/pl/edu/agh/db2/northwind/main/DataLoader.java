@@ -2,24 +2,29 @@ package pl.edu.agh.db2.northwind.main;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 import pl.edu.agh.db2.northwind.dao.*;
 import pl.edu.agh.db2.northwind.model.*;
 import pl.edu.agh.db2.northwind.oxm.XmlConverter;
 import pl.edu.agh.db2.northwind.oxm.holders.ListHolder;
 
 import javax.inject.Inject;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class DataLoader {
+
+	private static final String STATS_FILENAME = "loadingOrders.stats";
+
+	@SuppressWarnings("SpringJavaAutowiringInspection")
 	@Inject
 	private static Logger logger;
 
@@ -47,8 +52,6 @@ public class DataLoader {
 	@Autowired
 	private SupplierRepository supplierRepository;
 
-	private TransactionTemplate transactionTemplate;
-
 	@Autowired
 	private XmlConverter converter;
 
@@ -59,50 +62,87 @@ public class DataLoader {
 		dataLoader.start(args);
 	}
 
-	@Required
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionTemplate = new TransactionTemplate(transactionManager);
-	}
-
 	private void start(String[] args) {
-		List<Category> unmarshalledCategories = ((ListHolder<Category>) converter.loadFromXml("categories.xml")).getValues();
-		List<Supplier> unmarshalledSuppliers = ((ListHolder<Supplier>) converter.loadFromXml("suppliers.xml")).getValues();
-		List<Product> unmarshalledProducts = ((ListHolder<Product>) converter.loadFromXml("products.xml")).getValues();
+		List<Category> categories = ((ListHolder<Category>) converter.loadFromXml("categories.xml")).getValues();
+		List<Supplier> suppliers = ((ListHolder<Supplier>) converter.loadFromXml("suppliers.xml")).getValues();
+		List<Product> products = ((ListHolder<Product>) converter.loadFromXml("products.xml")).getValues();
 
-		List<Shipper> unmarshalledShippers = ((ListHolder<Shipper>) converter.loadFromXml("shippers.xml")).getValues();
-		List<Employee> unmarshalledEmployees = ((ListHolder<Employee>) converter.loadFromXml("employees.xml")).getValues();
-		List<Customer> unmarshalledCustomers = ((ListHolder<Customer>) converter.loadFromXml("customers.xml")).getValues();
+		List<Shipper> shippers = ((ListHolder<Shipper>) converter.loadFromXml("shippers.xml")).getValues();
+		List<Employee> employees = ((ListHolder<Employee>) converter.loadFromXml("employees.xml")).getValues();
+		List<Customer> customers = ((ListHolder<Customer>) converter.loadFromXml("customers.xml")).getValues();
 
-		final List<Order> unmarshalledOrders = ((ListHolder<Order>) converter.loadFromXml("orders.xml")).getValues();
+		final List<List<Order>> orders = new ArrayList<>();
+		orders.add(((ListHolder<Order>) converter.loadFromXml("orders.xml")).getValues());
+		orders.add(((ListHolder<Order>) converter.loadFromXml("orders_rand_10000.xml")).getValues());
+		orders.add(((ListHolder<Order>) converter.loadFromXml("orders_rand_20000.xml")).getValues());
 
-		final List<OrderDetail> unmarshalledOrderDetails = ((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails.xml")).getValues();
+		final List<List<OrderDetail>> orderDetails = new ArrayList<>();
+		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails.xml")).getValues());
+		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_10000.xml")).getValues());
+		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_20000.xml")).getValues());
 
 		logger.info("Loading ALL started");
-		categoryRepository.save(unmarshalledCategories);
-		supplierRepository.save(unmarshalledSuppliers);
-		productRepository.saveAll(unmarshalledProducts);
+		categoryRepository.save(categories);
+		supplierRepository.save(suppliers);
+		productRepository.saveAll(products);
 
-		shipperRepository.save(unmarshalledShippers);
-		employeeRepository.saveAll(unmarshalledEmployees);
-		customerRepository.save(unmarshalledCustomers);
+		shipperRepository.save(shippers);
+		employeeRepository.saveAll(employees);
+		customerRepository.save(customers);
 
 		logger.info("Loading orders started");
-		orderRepository.saveAll(unmarshalledOrders);
-		orderDetailRepository.saveAll(unmarshalledOrderDetails);
+
+		long[] times = new long[4];
+		times[0] = System.currentTimeMillis();
+		orderRepository.saveAll(orders.get(0));
+		orderDetailRepository.saveAll(orderDetails.get(0));
+
+		times[1] = System.currentTimeMillis();
+		orderRepository.saveAll(orders.get(1));
+		orderDetailRepository.saveAll(orderDetails.get(1));
+
+		times[2] = System.currentTimeMillis();
+		orderRepository.saveAll(orders.get(2));
+		orderDetailRepository.saveAll(orderDetails.get(2));
+
+		times[3] = System.currentTimeMillis();
+
 		logger.info("Loading orders finished");
 		logger.info("Loading ALL finished");
 
-		transactionTemplate.execute(new TransactionCallback() {
-			@Override
-			public Object doInTransaction(TransactionStatus status) {
-				System.out.println(productRepository.findOne(12));
-				System.out.println(productRepository.findOne(12).getProductName());
-				System.out.println(productRepository.findOne(12).getSupplierId());
-				System.out.println(supplierRepository.findOne(5).getCompanyName());
-				System.out.println(productRepository.findOne(12).getSupplier().getCompanyName());
+		// TODO: conditional logging
+		// TODO 2: logging file name read from property
+		try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(STATS_FILENAME, true)))) {
+			logger.info(String.format("Writing times measurements data to: %s", STATS_FILENAME));
+			out.println(String.format("Measurements from: %s", new Date().toString()));
+			out.println("##################");
+			out.println("Orders_count\tOrderDetails_count\tTotal_time\tAvg_time_for_one_Order\t######");
+			long totalOrdersCountAll = 0;
+			long totalOrderDetailsCountAll = 0;
+			long totalTimeAll = 0;
+			for (int i = 0; i < 3; ++i) {
+				long totalTime = times[i + 1] - times[i];
+				totalTimeAll += totalTime;
+				long totalOrdersCount = orders.get(i).size();
+				totalOrdersCountAll += totalOrdersCount;
+				long totalOrderDetailsCount = orderDetails.get(i).size();
+				totalOrderDetailsCountAll += totalOrderDetailsCount;
 
-				return null;
+				out.println(String.format("%d\t%d\t%d\t%d",
+										  totalOrdersCount,
+										  totalOrderDetailsCount,
+										  totalTime,
+										  totalTime / totalOrdersCount));
 			}
-		});
+			out.println("###\t\t###");
+			out.println(String.format("%d\t%d\t%d\t%d",
+									  totalOrdersCountAll,
+									  totalOrderDetailsCountAll,
+									  totalTimeAll,
+									  totalTimeAll / totalOrdersCountAll));
+			out.println("##################\n");
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 }
