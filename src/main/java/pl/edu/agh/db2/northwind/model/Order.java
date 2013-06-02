@@ -83,7 +83,7 @@ public class Order implements Serializable {
 	@Column(length = 15)
 	private String shipRegion;
 
-	@Column(length = 10)
+	@Column(length = 12)
 	private String shipPostalCode;
 
 	@Column(length = 15)
