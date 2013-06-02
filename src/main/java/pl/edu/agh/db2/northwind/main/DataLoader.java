@@ -1,4 +1,4 @@
-package pl.edu.agh.db2.northwind.demo;
+package pl.edu.agh.db2.northwind.main;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Component
-public class MainApp {
+public class DataLoader {
 	@Inject
 	private static Logger logger;
 
@@ -55,8 +55,8 @@ public class MainApp {
 	public static void main(String[] args) {
 		ApplicationContext appContext = new ClassPathXmlApplicationContext("context.xml");
 
-		MainApp mainApp = appContext.getBean(MainApp.class);
-		mainApp.start(args);
+		DataLoader dataLoader = appContext.getBean(DataLoader.class);
+		dataLoader.start(args);
 	}
 
 	@Required

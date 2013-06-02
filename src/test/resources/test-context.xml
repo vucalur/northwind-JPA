@@ -49,7 +49,7 @@
 	</bean>
 
 
-	<bean id="mainApp" class="pl.edu.agh.db2.northwind.demo.MainApp">
+	<bean id="dataLoader" class="pl.edu.agh.db2.northwind.main.DataLoader">
 		<property name="transactionManager" ref="transactionManager"/>
 	</bean>
 
