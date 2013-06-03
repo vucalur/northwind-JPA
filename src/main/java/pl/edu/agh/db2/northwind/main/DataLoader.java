@@ -72,12 +72,10 @@ public class DataLoader {
 		List<Customer> customers = ((ListHolder<Customer>) converter.loadFromXml("customers.xml")).getValues();
 
 		final List<List<Order>> orders = new ArrayList<>();
-		orders.add(((ListHolder<Order>) converter.loadFromXml("orders.xml")).getValues());
 		orders.add(((ListHolder<Order>) converter.loadFromXml("orders_rand_10000.xml")).getValues());
 		orders.add(((ListHolder<Order>) converter.loadFromXml("orders_rand_20000.xml")).getValues());
 
 		final List<List<OrderDetail>> orderDetails = new ArrayList<>();
-		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails.xml")).getValues());
 		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_10000.xml")).getValues());
 		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_20000.xml")).getValues());
 
@@ -92,7 +90,7 @@ public class DataLoader {
 
 		logger.info("Loading orders started");
 
-		long[] times = new long[4];
+		long[] times = new long[3];
 		times[0] = System.currentTimeMillis();
 		orderRepository.saveAll(orders.get(0));
 		orderDetailRepository.saveAll(orderDetails.get(0));
@@ -102,10 +100,6 @@ public class DataLoader {
 		orderDetailRepository.saveAll(orderDetails.get(1));
 
 		times[2] = System.currentTimeMillis();
-		orderRepository.saveAll(orders.get(2));
-		orderDetailRepository.saveAll(orderDetails.get(2));
-
-		times[3] = System.currentTimeMillis();
 
 		logger.info("Loading orders finished");
 		logger.info("Loading ALL finished");
@@ -120,7 +114,7 @@ public class DataLoader {
 			long totalOrdersCountAll = 0;
 			long totalOrderDetailsCountAll = 0;
 			long totalTimeAll = 0;
-			for (int i = 0; i < 3; ++i) {
+			for (int i = 0; i < 2; ++i) {
 				long totalTime = times[i + 1] - times[i];
 				totalTimeAll += totalTime;
 				long totalOrdersCount = orders.get(i).size();

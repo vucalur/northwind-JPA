@@ -31,7 +31,6 @@
 		<!--<artifactId>hibernate-ehcache</artifactId>-->
 		<!--<version>${hibernate.version}</version>-->
 		<!--</dependency>-->
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -158,6 +157,41 @@
 								<phase>generate-sources</phase>
 								<configuration>
 									<outputDirectory>target/metamodel</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>DataLoader-produce-jar</id>
+			<build>
+				<plugins>
+					<!--DO NOT USE mave-jar-plugin nor maven-assembly-plugin !!!-->
+					<!--http://stackoverflow.com/a/13943824/1432478-->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<transformers>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.handlers</resource>
+										</transformer>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.schemas</resource>
+										</transformer>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<mainClass>pl.edu.agh.db2.northwind.main.DataLoader</mainClass>
+										</transformer>
+									</transformers>
 								</configuration>
 							</execution>
 						</executions>
