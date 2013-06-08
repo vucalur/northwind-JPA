@@ -14,9 +14,10 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import pl.edu.agh.db2.northwind.dao.OrderDetailRepository;
 import pl.edu.agh.db2.northwind.dao.OrderRepository;
+import pl.edu.agh.db2.northwind.main.query.results.ResultsPrinter;
+import pl.edu.agh.db2.northwind.main.query.stats.StatsPrinter;
 
 import javax.inject.Inject;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class QueryRunner {
 	@Autowired
 	private OrderRepository orderRepository;
 
+	private ResultsPrinter resultsPrinter;
+
+	private StatsPrinter statsPrinter;
+
 	private TransactionTemplate transactionTemplate;
 
 	public static void main(String[] args) {
@@ -47,147 +52,103 @@ public class QueryRunner {
 		queryRunner.start(args);
 	}
 
-	@Required
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionTemplate = new TransactionTemplate(transactionManager);
-	}
-
 	private void start(String[] args) {
 		List<Integer> queriesToExecute = parseQueriesToExecuteStr();
 
-		try (PrintWriter resultsOut = new PrintWriter(new BufferedWriter(getResultsOutput()));
-			 PrintWriter statsOut = new PrintWriter(new BufferedWriter(getStatsOutput()))) {
+		if (queriesToExecute.contains(1)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running totalOrdersByCountry");
 
-			if (queriesToExecute.contains(1)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running totalOrdersByCountry");
+					long start = System.currentTimeMillis();
+					List<org.javatuples.Pair<String, Integer>> result = orderRepository.totalOrdersByCountry();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print1(result);
+					statsPrinter.print1(stop - start);
+					return null;
+				}
+			});
+		}
 
-						long start = System.currentTimeMillis();
-						List<org.javatuples.Pair<String, Integer>> result = orderRepository.totalOrdersByCountry();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (org.javatuples.Pair<String, Integer> p : result) {
-								resultsOut.println(String.format("%15s\t%8d", p.getValue0(), p.getValue1()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "totalOrdersByCountry", stop - start));
-						return null;
-					}
-				});
-			}
+		if (queriesToExecute.contains(2)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running avgRealisationTimeInDaysByYear");
 
-			if (queriesToExecute.contains(2)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running avgRealisationTimeInDaysByYear");
+					long start = System.currentTimeMillis();
+					List<org.javatuples.Pair<Integer, Double>> result = orderRepository.avgRealisationTimeInDaysByYear();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print2(result);
+					statsPrinter.print2(stop - start);
+					return null;
+				}
+			});
+		}
 
-						long start = System.currentTimeMillis();
-						List<org.javatuples.Pair<Integer, Double>> result = orderRepository.avgRealisationTimeInDaysByYear();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (org.javatuples.Pair<Integer, Double> p : result) {
-								resultsOut.println(String.format("%8d\t%8.4f", p.getValue0(), p.getValue1()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "avgRealisationTimeInDaysByYear", stop - start));
-						return null;
-					}
-				});
-			}
+		if (queriesToExecute.contains(3)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running productQuantitySumBySupplier");
 
-			if (queriesToExecute.contains(3)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running productQuantitySumBySupplier");
+					long start = System.currentTimeMillis();
+					List<org.javatuples.Pair<Integer, String>> result = orderDetailRepository.productQuantitySumBySupplier();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print3(result);
+					statsPrinter.print3(stop - start);
+					return null;
+				}
+			});
+		}
 
-						long start = System.currentTimeMillis();
-						List<org.javatuples.Pair<Integer, String>> result = orderDetailRepository.productQuantitySumBySupplier();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (org.javatuples.Pair<Integer, String> p : result) {
-								resultsOut.println(String.format("%8d\t%25s", p.getValue0(), p.getValue1()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "productQuantitySumBySupplier", stop - start));
-						return null;
-					}
-				});
-			}
+		if (queriesToExecute.contains(4)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running ordersTotalByWeekDay");
 
-			if (queriesToExecute.contains(4)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running ordersTotalByWeekDay");
+					long start = System.currentTimeMillis();
+					List<Pair<Integer, Double>> result = orderDetailRepository.ordersTotalByWeekDay();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print4(result);
+					statsPrinter.print4(stop - start);
+					return null;
+				}
+			});
+		}
 
-						long start = System.currentTimeMillis();
-						List<Pair<Integer, Double>> result = orderDetailRepository.ordersTotalByWeekDay();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (Pair<Integer, Double> p : result) {
-								resultsOut.println(String.format("%8s\t%10f", p.getValue0(), p.getValue1()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "ordersTotalByWeekDay", stop - start));
-						return null;
-					}
-				});
-			}
+		if (queriesToExecute.contains(5)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running ordersTotalByYearByCustomerCountry");
 
-			if (queriesToExecute.contains(5)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running ordersTotalByYearByCustomerCountry");
+					long start = System.currentTimeMillis();
+					List<Triplet<Double, Integer, String>> result = orderDetailRepository.ordersTotalByYearByCustomerCountry();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print5(result);
+					statsPrinter.print5(stop - start);
+					return null;
+				}
+			});
+		}
 
-						long start = System.currentTimeMillis();
-						List<Triplet<Double, Integer, String>> result = orderDetailRepository.ordersTotalByYearByCustomerCountry();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (Triplet<Double, Integer, String> p : result) {
-								resultsOut.println(String.format("%10f\t%8d\t%12s", p.getValue0(), p.getValue1(), p.getValue2()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "ordersTotalByYearByCustomerCountry", stop - start));
-						return null;
-					}
-				});
-			}
+		if (queriesToExecute.contains(6)) {
+			transactionTemplate.execute(new TransactionCallback() {
+				@Override
+				public Object doInTransaction(TransactionStatus status) {
+					logger.info("running avgUnitPriceByShipperByYear");
 
-			if (queriesToExecute.contains(6)) {
-				transactionTemplate.execute(new TransactionCallback() {
-					@Override
-					public Object doInTransaction(TransactionStatus status) {
-						logger.info("running avgUnitPriceByShipperByYear");
-
-						long start = System.currentTimeMillis();
-						List<Triplet<Double, Integer, Integer>> result = orderDetailRepository.avgUnitPriceByShipperByYear();
-						long stop = System.currentTimeMillis();
-						if (properties.isShowResults()) {
-							for (Triplet<Double, Integer, Integer> p : result) {
-								resultsOut.println(String.format("%10f\t%8d\t%8d", p.getValue0(), p.getValue1(), p.getValue2()));
-							}
-							resultsOut.println("\n");
-						}
-						statsOut.println(String.format("%-34s\t%8d ms", "avgUnitPriceByShipperByYear", stop - start));
-						return null;
-					}
-				});
-			}
-
-			if (properties.isShowResults()) {
-				resultsOut.println("###############################################");
-			}
-			statsOut.println("###############################################");
+					long start = System.currentTimeMillis();
+					List<Triplet<Double, Integer, Integer>> result = orderDetailRepository.avgUnitPriceByShipperByYear();
+					long stop = System.currentTimeMillis();
+					resultsPrinter.print6(result);
+					statsPrinter.print6(stop - start);
+					return null;
+				}
+			});
 		}
 	}
 
@@ -200,27 +161,18 @@ public class QueryRunner {
 		return result;
 	}
 
-	private Writer getStatsOutput() {
-		try {
-			if (properties.getOutputTypeStats().equals("file")) {
-				return new FileWriter(properties.getPathStats(), properties.isAppendStats());
-			} else {
-				return new OutputStreamWriter(System.out);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	@Required
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionTemplate = new TransactionTemplate(transactionManager);
 	}
 
-	private Writer getResultsOutput() {
-		try {
-			if (properties.getOutputTypeStats().equals("file")) {
-				return new FileWriter(properties.getPathResults(), properties.isAppendResults());
-			} else {
-				return new OutputStreamWriter(System.out);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	@Required
+	public void setResultsPrinter(ResultsPrinter resultsPrinter) {
+		this.resultsPrinter = resultsPrinter;
+	}
+
+	@Required
+	public void setStatsPrinter(StatsPrinter statsPrinter) {
+		this.statsPrinter = statsPrinter;
 	}
 }
