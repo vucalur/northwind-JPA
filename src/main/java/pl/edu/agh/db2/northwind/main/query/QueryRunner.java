@@ -1,4 +1,4 @@
-package pl.edu.agh.db2.northwind.main;
+package pl.edu.agh.db2.northwind.main.query;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
@@ -14,7 +14,6 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import pl.edu.agh.db2.northwind.dao.OrderDetailRepository;
 import pl.edu.agh.db2.northwind.dao.OrderRepository;
-import pl.edu.agh.db2.northwind.main.properties.QueryRunnerProperties;
 
 import javax.inject.Inject;
 import java.io.*;
@@ -27,7 +26,7 @@ public class QueryRunner {
 	private static final String QUERIES_NUMBERS_DELIMITER = ",";
 
 	@Autowired
-	private QueryRunnerProperties properties;
+	private QrProperties properties;
 
 	@SuppressWarnings("SpringJavaAutowiringInspection")
 	@Inject

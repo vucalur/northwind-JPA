@@ -50,7 +50,7 @@
 	</bean>
 
 
-	<bean id="queryRunner" class="pl.edu.agh.db2.northwind.main.QueryRunner">
+	<bean id="queryRunner" class="pl.edu.agh.db2.northwind.main.query.QueryRunner">
 		<property name="transactionManager" ref="transactionManager"/>
 	</bean>
 

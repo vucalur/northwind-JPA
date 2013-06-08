@@ -1,10 +1,10 @@
-package pl.edu.agh.db2.northwind.main.properties;
+package pl.edu.agh.db2.northwind.main.query;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class QueryRunnerProperties {
+public class QrProperties {
 
 	@Value("${queryRunner.queriesToExecute}")
 	private String queriesToExecuteStr;
