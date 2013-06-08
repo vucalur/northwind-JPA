@@ -1,21 +1,14 @@
 package pl.edu.agh.db2.northwind.main.query.stats.impl;
 
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import pl.edu.agh.db2.northwind.main.query.stats.StatsPrinter;
 
 import java.io.PrintWriter;
 
-@Component
-@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class VerboseStatsPrinter implements StatsPrinter {
 
-	private PrintWriter out;
+	private final PrintWriter out;
 
-	@Required
-	public void setOut(PrintWriter out) {
+	public VerboseStatsPrinter(PrintWriter out) {
 		this.out = out;
 	}
 
@@ -48,5 +41,13 @@ public class VerboseStatsPrinter implements StatsPrinter {
 	public void print6(long timeInMillis) {
 		out.println(String.format("%-34s\t%8d ms", "avgUnitPriceByShipperByYear", timeInMillis));
 		out.println("###############################################");
+	}
+
+	@Override
+	public void close() {
+		if (out == null) {
+			return;
+		}
+		out.close();
 	}
 }

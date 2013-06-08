@@ -9,13 +9,10 @@ public class QrProperties {
 	@Value("${queryRunner.queriesToExecute}")
 	private String queriesToExecuteStr;
 
-	@Value("${queryRunner.results.show}")
-	private boolean showResults;
-
 	@Value("${queryRunner.results.out.append}")
 	private boolean appendResults;
 
-	@Value("${queryRunner.results.out.path}")
+	@Value("${queryRunner.results.out.type.file.path}")
 	private String pathResults;
 
 	@Value("${queryRunner.results.out.type}")
@@ -24,7 +21,7 @@ public class QrProperties {
 	@Value("${queryRunner.stats.out.append}")
 	private boolean appendStats;
 
-	@Value("${queryRunner.stats.out.path}")
+	@Value("${queryRunner.stats.out.type.file.path}")
 	private String pathStats;
 
 	@Value("${queryRunner.stats.out.type}")
@@ -32,10 +29,6 @@ public class QrProperties {
 
 	public String getQueriesToExecuteStr() {
 		return queriesToExecuteStr;
-	}
-
-	public boolean isShowResults() {
-		return showResults;
 	}
 
 	public boolean isAppendResults() {

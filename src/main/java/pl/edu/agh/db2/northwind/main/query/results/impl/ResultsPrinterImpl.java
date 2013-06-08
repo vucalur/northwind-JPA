@@ -2,23 +2,16 @@ package pl.edu.agh.db2.northwind.main.query.results.impl;
 
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import pl.edu.agh.db2.northwind.main.query.results.ResultsPrinter;
 
 import java.io.PrintWriter;
 import java.util.List;
 
-@Component
-@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class ResultsPrinterImpl implements ResultsPrinter {
 
-	private PrintWriter out;
+	private final PrintWriter out;
 
-	@Required
-	public void setOut(PrintWriter out) {
+	public ResultsPrinterImpl(PrintWriter out) {
 		this.out = out;
 	}
 
@@ -68,5 +61,13 @@ public class ResultsPrinterImpl implements ResultsPrinter {
 			out.println(String.format("%10f\t%8d\t%8d", p.getValue0(), p.getValue1(), p.getValue2()));
 		}
 		out.println("\n###############################################");
+	}
+
+	@Override
+	public void close() {
+		if (out == null) {
+			return;
+		}
+		out.close();
 	}
 }

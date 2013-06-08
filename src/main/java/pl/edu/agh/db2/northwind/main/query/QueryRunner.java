@@ -29,6 +29,9 @@ public class QueryRunner {
 	@Autowired
 	private QrProperties properties;
 
+	@Autowired
+	private QrConfigurator configurator;
+
 	@SuppressWarnings("SpringJavaAutowiringInspection")
 	@Inject
 	private static Logger logger;
@@ -38,10 +41,6 @@ public class QueryRunner {
 
 	@Autowired
 	private OrderRepository orderRepository;
-
-	private ResultsPrinter resultsPrinter;
-
-	private StatsPrinter statsPrinter;
 
 	private TransactionTemplate transactionTemplate;
 
@@ -55,100 +54,104 @@ public class QueryRunner {
 	private void start(String[] args) {
 		List<Integer> queriesToExecute = parseQueriesToExecuteStr();
 
-		if (queriesToExecute.contains(1)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running totalOrdersByCountry");
+		try (ResultsPrinter resultsPrinter = configurator.getResultsPrinter();
+			 StatsPrinter statsPrinter = configurator.getStatsPrinter()) {
 
-					long start = System.currentTimeMillis();
-					List<org.javatuples.Pair<String, Integer>> result = orderRepository.totalOrdersByCountry();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print1(result);
-					statsPrinter.print1(stop - start);
-					return null;
-				}
-			});
-		}
+			if (queriesToExecute.contains(1)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running totalOrdersByCountry");
 
-		if (queriesToExecute.contains(2)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running avgRealisationTimeInDaysByYear");
+						long start = System.currentTimeMillis();
+						List<org.javatuples.Pair<String, Integer>> result = orderRepository.totalOrdersByCountry();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print1(result);
+						statsPrinter.print1(stop - start);
+						return null;
+					}
+				});
+			}
 
-					long start = System.currentTimeMillis();
-					List<org.javatuples.Pair<Integer, Double>> result = orderRepository.avgRealisationTimeInDaysByYear();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print2(result);
-					statsPrinter.print2(stop - start);
-					return null;
-				}
-			});
-		}
+			if (queriesToExecute.contains(2)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running avgRealisationTimeInDaysByYear");
 
-		if (queriesToExecute.contains(3)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running productQuantitySumBySupplier");
+						long start = System.currentTimeMillis();
+						List<org.javatuples.Pair<Integer, Double>> result = orderRepository.avgRealisationTimeInDaysByYear();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print2(result);
+						statsPrinter.print2(stop - start);
+						return null;
+					}
+				});
+			}
 
-					long start = System.currentTimeMillis();
-					List<org.javatuples.Pair<Integer, String>> result = orderDetailRepository.productQuantitySumBySupplier();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print3(result);
-					statsPrinter.print3(stop - start);
-					return null;
-				}
-			});
-		}
+			if (queriesToExecute.contains(3)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running productQuantitySumBySupplier");
 
-		if (queriesToExecute.contains(4)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running ordersTotalByWeekDay");
+						long start = System.currentTimeMillis();
+						List<org.javatuples.Pair<Integer, String>> result = orderDetailRepository.productQuantitySumBySupplier();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print3(result);
+						statsPrinter.print3(stop - start);
+						return null;
+					}
+				});
+			}
 
-					long start = System.currentTimeMillis();
-					List<Pair<Integer, Double>> result = orderDetailRepository.ordersTotalByWeekDay();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print4(result);
-					statsPrinter.print4(stop - start);
-					return null;
-				}
-			});
-		}
+			if (queriesToExecute.contains(4)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running ordersTotalByWeekDay");
 
-		if (queriesToExecute.contains(5)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running ordersTotalByYearByCustomerCountry");
+						long start = System.currentTimeMillis();
+						List<Pair<Integer, Double>> result = orderDetailRepository.ordersTotalByWeekDay();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print4(result);
+						statsPrinter.print4(stop - start);
+						return null;
+					}
+				});
+			}
 
-					long start = System.currentTimeMillis();
-					List<Triplet<Double, Integer, String>> result = orderDetailRepository.ordersTotalByYearByCustomerCountry();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print5(result);
-					statsPrinter.print5(stop - start);
-					return null;
-				}
-			});
-		}
+			if (queriesToExecute.contains(5)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running ordersTotalByYearByCustomerCountry");
 
-		if (queriesToExecute.contains(6)) {
-			transactionTemplate.execute(new TransactionCallback() {
-				@Override
-				public Object doInTransaction(TransactionStatus status) {
-					logger.info("running avgUnitPriceByShipperByYear");
+						long start = System.currentTimeMillis();
+						List<Triplet<Double, Integer, String>> result = orderDetailRepository.ordersTotalByYearByCustomerCountry();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print5(result);
+						statsPrinter.print5(stop - start);
+						return null;
+					}
+				});
+			}
 
-					long start = System.currentTimeMillis();
-					List<Triplet<Double, Integer, Integer>> result = orderDetailRepository.avgUnitPriceByShipperByYear();
-					long stop = System.currentTimeMillis();
-					resultsPrinter.print6(result);
-					statsPrinter.print6(stop - start);
-					return null;
-				}
-			});
+			if (queriesToExecute.contains(6)) {
+				transactionTemplate.execute(new TransactionCallback() {
+					@Override
+					public Object doInTransaction(TransactionStatus status) {
+						logger.info("running avgUnitPriceByShipperByYear");
+
+						long start = System.currentTimeMillis();
+						List<Triplet<Double, Integer, Integer>> result = orderDetailRepository.avgUnitPriceByShipperByYear();
+						long stop = System.currentTimeMillis();
+						resultsPrinter.print6(result);
+						statsPrinter.print6(stop - start);
+						return null;
+					}
+				});
+			}
 		}
 	}
 
@@ -164,15 +167,5 @@ public class QueryRunner {
 	@Required
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionTemplate = new TransactionTemplate(transactionManager);
-	}
-
-	@Required
-	public void setResultsPrinter(ResultsPrinter resultsPrinter) {
-		this.resultsPrinter = resultsPrinter;
-	}
-
-	@Required
-	public void setStatsPrinter(StatsPrinter statsPrinter) {
-		this.statsPrinter = statsPrinter;
 	}
 }

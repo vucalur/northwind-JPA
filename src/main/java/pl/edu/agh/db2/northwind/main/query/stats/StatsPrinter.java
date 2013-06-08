@@ -1,6 +1,6 @@
 package pl.edu.agh.db2.northwind.main.query.stats;
 
-public interface StatsPrinter {
+public interface StatsPrinter extends AutoCloseable {
 	void print1(long timeInMillis);
 
 	void print2(long timeInMillis);
@@ -12,4 +12,7 @@ public interface StatsPrinter {
 	void print5(long timeInMillis);
 
 	void print6(long timeInMillis);
+
+	@Override
+	void close();
 }
