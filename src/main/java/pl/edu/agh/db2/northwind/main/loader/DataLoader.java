@@ -55,6 +55,9 @@ public class DataLoader {
 	@Autowired
 	private XmlConverter converter;
 
+	@Autowired
+	private ReferencesUpdater updater;
+
 	public static void main(String[] args) {
 		ApplicationContext appContext = new ClassPathXmlApplicationContext("context.xml");
 
@@ -79,6 +82,11 @@ public class DataLoader {
 		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_10000.xml")).getValues());
 		orderDetails.add(((ListHolder<OrderDetail>) converter.loadFromXml("orderdetails_rand_20000.xml")).getValues());
 
+		updater.updateOrders(orders.get(0), shippers, employees, customers);
+		updater.updateOrders(orders.get(1), shippers, employees, customers);
+		updater.updateOrderDetails(orderDetails.get(0), products, orders.get(0));
+		updater.updateOrderDetails(orderDetails.get(1), products, orders.get(1));
+
 		logger.info("Loading ALL started");
 		categoryRepository.save(categories);
 		supplierRepository.save(suppliers);
@@ -92,12 +100,13 @@ public class DataLoader {
 
 		long[] times = new long[3];
 		times[0] = System.currentTimeMillis();
-		orderRepository.saveAll(orders.get(0));
-		orderDetailRepository.saveAll(orderDetails.get(0));
+
+		orderRepository.save(orders.get(0));
+		orderDetailRepository.save(orderDetails.get(0));
 
 		times[1] = System.currentTimeMillis();
-		orderRepository.saveAll(orders.get(1));
-		orderDetailRepository.saveAll(orderDetails.get(1));
+		orderRepository.save(orders.get(1));
+		orderDetailRepository.save(orderDetails.get(1));
 
 		times[2] = System.currentTimeMillis();
 

@@ -30,22 +30,14 @@ public class Order implements Serializable {
 	@JoinColumn(name = "customerid")
 	private Customer customer;
 
-	/**
-	 * Storing both foreign key and referenced entity (both target the very same DB column)
-	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
-	 */
-	@Column(name = "customerid", insertable = false, updatable = false)
+	@Transient
 	private String customerId;
 
 	@ManyToOne
 	@JoinColumn(name = "employeeid")
 	private Employee employee;
 
-	/**
-	 * Storing both foreign key and referenced entity (both target the very same DB column)
-	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
-	 */
-	@Column(name = "employeeid", insertable = false, updatable = false)
+	@Transient
 	private Integer employeeId;
 
 	@Temporal(TemporalType.DATE)
@@ -61,11 +53,7 @@ public class Order implements Serializable {
 	@JoinColumn(name = "shipvia")
 	private Shipper shipper;
 
-	/**
-	 * Storing both foreign key and referenced entity (both target the very same DB column)
-	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
-	 */
-	@Column(name = "shipvia", insertable = false, updatable = false)
+	@Transient
 	private Integer shipperId;
 
 	// TODO: money type

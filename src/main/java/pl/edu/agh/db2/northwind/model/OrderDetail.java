@@ -27,22 +27,14 @@ public class OrderDetail implements Serializable {
 	@JoinColumn(name = "orderid")
 	private Order order;
 
-	/**
-	 * Storing both foreign key and referenced entity (both target the very same DB column)
-	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
-	 */
-	@Column(name = "orderid", insertable = false, updatable = false)
+	@Transient
 	private Integer orderId;
 
 	@ManyToOne
 	@JoinColumn(name = "productid")
 	private Product product;
 
-	/**
-	 * Storing both foreign key and referenced entity (both target the very same DB column)
-	 * See {@linktourl http://stackoverflow.com/a/6312018/1432478}
-	 */
-	@Column(name = "productid", insertable = false, updatable = false)
+	@Transient
 	private Integer productId;
 
 	// TODO: money type
