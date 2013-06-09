@@ -2,6 +2,8 @@ package pl.edu.agh.db2.northwind.model;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,6 +27,8 @@ public class OrderDetail implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "orderid")
+	// http://stackoverflow.com/a/10347516/1432478
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Order order;
 
 	@Transient

@@ -1,5 +1,7 @@
 package pl.edu.agh.db2.northwind.dao.workaround;
 
+import org.springframework.data.repository.NoRepositoryBean;
+
 import java.util.List;
 
 /**
@@ -56,6 +58,7 @@ import java.util.List;
  *
  * @param <T> Entity's A type
  */
+@NoRepositoryBean
 public interface GenericRelationAwareRepository<T> {
 	// TODO: provide update (in crUd) operations if needed
 

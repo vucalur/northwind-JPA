@@ -1,7 +1,6 @@
 package pl.edu.agh.db2.northwind.dao;
 
 import org.javatuples.Pair;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.Order;
@@ -9,7 +8,7 @@ import pl.edu.agh.db2.northwind.model.Order;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer>, OrderRepositoryCustom {
+public interface OrderRepository extends FlushingEveryNRepository<Order, Integer> {
 
 	/**
 	 * EN: How many orders were submitted from each country

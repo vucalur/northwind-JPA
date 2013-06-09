@@ -22,7 +22,7 @@ public class ReferencesUpdater {
 				return shipper;
 			}
 		}
-		return null;
+		throw new IllegalStateException(String.format("Unable to find Shipper with id: %d", id));
 	}
 
 	private Employee findEmployeeById(Integer id, List<Employee> employees) {
@@ -31,7 +31,7 @@ public class ReferencesUpdater {
 				return employee;
 			}
 		}
-		return null;
+		throw new IllegalStateException(String.format("Unable to find Employee with id: %d", id));
 	}
 
 	private Customer findCustomerById(String id, List<Customer> customers) {
@@ -40,7 +40,7 @@ public class ReferencesUpdater {
 				return customer;
 			}
 		}
-		return null;
+		throw new IllegalStateException(String.format("Unable to find Customer with id: %d", id));
 	}
 
 	public void updateOrderDetails(List<OrderDetail> toUpdate, List<Product> products, List<Order> orders) {
@@ -56,7 +56,7 @@ public class ReferencesUpdater {
 				return product;
 			}
 		}
-		return null;
+		throw new IllegalStateException(String.format("Unable to find Product with id: %d", id));
 	}
 
 	private Order findOrderById(Integer id, List<Order> orders) {
@@ -65,6 +65,6 @@ public class ReferencesUpdater {
 				return order;
 			}
 		}
-		return null;
+		throw new IllegalStateException(String.format("Unable to find Order with id: %d", id));
 	}
 }

@@ -24,7 +24,7 @@
 
 	<context:property-placeholder location="classpath:properties/*.properties"/>
 
-	<jpa:repositories base-package="pl.edu.agh.db2.northwind.dao"/>
+	<jpa:repositories base-package="pl.edu.agh.db2.northwind.dao" factory-class="${dataloader.flush.class}"/>
 
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -32,12 +32,24 @@
 		  class="org.springframework.orm.jpa.JpaTransactionManager"
 		  p:entityManagerFactory-ref="entityManagerFactory"/>
 
-	<bean id="entityManagerFactory"
-		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-		  p:dataSource-ref="dataSource"
-		  p:persistenceUnitName="northwind-spring-jpa">
-		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="persistenceProviderClass" value="org.hibernate.ejb.HibernatePersistence"/>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgresPlusDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.jdbc.batch_size">${dataloader.flush.batch_size}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.EJB3NamingStrategy</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>pl.edu.agh.db2.northwind.model</value>
+			</list>
 		</property>
 	</bean>
 

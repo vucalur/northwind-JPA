@@ -2,7 +2,6 @@ package pl.edu.agh.db2.northwind.dao;
 
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.edu.agh.db2.northwind.model.OrderDetail;
@@ -10,7 +9,7 @@ import pl.edu.agh.db2.northwind.model.OrderDetail;
 import java.util.List;
 
 @Repository
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer>, OrderDetailRepositoryCustom {
+public interface OrderDetailRepository extends FlushingEveryNRepository<OrderDetail, Integer> {
 
 	/**
 	 * EN: How many product units from each of the suppliers were sold

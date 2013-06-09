@@ -116,7 +116,7 @@ public class DataLoader {
 		// TODO: conditional logging
 		// TODO 2: logging file name read from property
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(STATS_FILENAME, true)))) {
-			logger.info(String.format("Writing times measurements data to: %s", STATS_FILENAME));
+			logger.info(String.format("Writing time measurements data to: %s", STATS_FILENAME));
 			out.println(String.format("Measurements from: %s", new Date().toString()));
 			out.println("##################");
 			out.println("Orders_count\tOrderDetails_count\tTotal_time\tAvg_time_for_one_Order\t######");
