@@ -39,6 +39,11 @@ public class InlineStatsPrinter implements StatsPrinter {
 	@Override
 	public void print6(long timeInMillis) {
 		printWithTab(timeInMillis, out);
+	}
+
+	@Override
+	public void printFinishTime(long timeInMillis) {
+		printWithTab(timeInMillis, out);
 		out.println("");
 	}
 

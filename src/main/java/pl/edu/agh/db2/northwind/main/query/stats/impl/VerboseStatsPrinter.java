@@ -40,6 +40,11 @@ public class VerboseStatsPrinter implements StatsPrinter {
 	@Override
 	public void print6(long timeInMillis) {
 		out.println(String.format("%-34s\t%8d ms", "avgUnitPriceByShipperByYear", timeInMillis));
+	}
+
+	@Override
+	public void printFinishTime(long timeInMillis) {
+		out.println(String.format("%-34s\t%8d ms", "application totalTime", timeInMillis));
 		out.println("###############################################");
 	}
 

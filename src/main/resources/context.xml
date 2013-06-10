@@ -42,7 +42,9 @@
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.jdbc.batch_size">${dataloader.flush.batch_size}</prop>
-				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
+				<!--<prop key="hibernate.cache.use_query_cache">true</prop>-->
+				<!--<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>-->
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.EJB3NamingStrategy</prop>
 			</props>
 		</property>

@@ -26,15 +26,15 @@ public class QueryRunner {
 
 	private static final String QUERIES_NUMBERS_DELIMITER = ",";
 
+	@SuppressWarnings("SpringJavaAutowiringInspection")
+	@Inject
+	private static Logger logger;
+
 	@Autowired
 	private QrProperties properties;
 
 	@Autowired
 	private QrConfigurator configurator;
-
-	@SuppressWarnings("SpringJavaAutowiringInspection")
-	@Inject
-	private static Logger logger;
 
 	@Autowired
 	private OrderDetailRepository orderDetailRepository;
@@ -45,13 +45,14 @@ public class QueryRunner {
 	private TransactionTemplate transactionTemplate;
 
 	public static void main(String[] args) {
+		long allStart = System.currentTimeMillis();
 		ApplicationContext appContext = new ClassPathXmlApplicationContext("context.xml");
 
 		QueryRunner queryRunner = appContext.getBean(QueryRunner.class);
-		queryRunner.start(args);
+		queryRunner.start(args, allStart);
 	}
 
-	private void start(String[] args) {
+	private void start(String[] args, long allStart) {
 		List<Integer> queriesToExecute = parseQueriesToExecuteStr();
 
 		try (ResultsPrinter resultsPrinter = configurator.getResultsPrinter();
@@ -152,6 +153,9 @@ public class QueryRunner {
 					}
 				});
 			}
+
+			long allStop = System.currentTimeMillis();
+			statsPrinter.printFinishTime(allStop - allStart);
 		}
 	}
 

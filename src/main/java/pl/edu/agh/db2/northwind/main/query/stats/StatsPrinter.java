@@ -15,4 +15,6 @@ public interface StatsPrinter extends AutoCloseable {
 
 	@Override
 	void close();
+
+	void printFinishTime(long time);
 }
